@@ -4,63 +4,63 @@ import { roleLabels, roleColors } from '../utils/roleLabels';
 
 const statCards = [
   {
-    label: 'Enrolled Courses',
+    label: 'Cursos Inscritos',
     value: '—',
     icon: BookOpen,
     color: 'bg-blue-50 text-blue-600',
-    description: 'Coming soon',
+    description: 'Próximamente',
   },
   {
-    label: 'TA Applications',
+    label: 'Postulaciones AC',
     value: '—',
     icon: ClipboardList,
     color: 'bg-purple-50 text-purple-600',
-    description: 'Coming soon',
+    description: 'Próximamente',
   },
   {
-    label: 'Classmates',
+    label: 'Compañeros',
     value: '—',
     icon: Users,
     color: 'bg-green-50 text-green-600',
-    description: 'Coming soon',
+    description: 'Próximamente',
   },
   {
-    label: 'Notifications',
+    label: 'Notificaciones',
     value: '0',
     icon: Bell,
     color: 'bg-orange-50 text-orange-600',
-    description: 'Up to date',
+    description: 'Al día',
   },
 ];
 
 const quickActions = [
   {
-    label: 'Apply for TA',
-    description: 'Submit your teaching assistant application',
+    label: 'Postularme como AC',
+    description: 'Envía tu solicitud para ser Asistente de Cátedra',
     icon: ClipboardList,
     color: 'border-purple-200 hover:border-purple-400 hover:bg-purple-50',
     iconColor: 'text-purple-600',
     soon: true,
   },
   {
-    label: 'View Courses',
-    description: 'Browse and manage your enrolled courses',
+    label: 'Ver Cursos',
+    description: 'Navega y gestiona tus cursos inscritos',
     icon: BookOpen,
     color: 'border-blue-200 hover:border-blue-400 hover:bg-blue-50',
     iconColor: 'text-blue-600',
     soon: true,
   },
   {
-    label: 'Progress Tracker',
-    description: 'Monitor your academic performance',
+    label: 'Mi Progreso',
+    description: 'Monitorea tu rendimiento académico',
     icon: TrendingUp,
     color: 'border-green-200 hover:border-green-400 hover:bg-green-50',
     iconColor: 'text-green-600',
     soon: true,
   },
   {
-    label: 'Schedule',
-    description: 'View your upcoming classes and deadlines',
+    label: 'Horario',
+    description: 'Revisa tus próximas clases y fechas límite',
     icon: Clock,
     color: 'border-orange-200 hover:border-orange-400 hover:bg-orange-50',
     iconColor: 'text-orange-600',
@@ -73,9 +73,9 @@ const HomePage = () => {
 
   const greeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return 'Buenos días';
+    if (hour < 18) return 'Buenas tardes';
+    return 'Buenas noches';
   };
 
   return (
@@ -98,7 +98,7 @@ const HomePage = () => {
           )}
           <div>
             <p className="text-gray-500 text-sm">{greeting()}</p>
-            <h1 className="text-2xl font-bold text-gray-900">{user?.name || 'Student'}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{user?.name || 'Estudiante'}</h1>
             {user?.role && (
               <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mt-1 ${roleColors[user.role]}`}>
                 {roleLabels[user.role]}
@@ -127,7 +127,7 @@ const HomePage = () => {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
@@ -140,7 +140,7 @@ const HomePage = () => {
               >
                 {action.soon && (
                   <span className="absolute top-3 right-3 text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">
-                    Coming soon
+                    Próximamente
                   </span>
                 )}
                 <div className={`w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 ${action.iconColor}`}>
@@ -156,10 +156,10 @@ const HomePage = () => {
 
       {/* Welcome notice */}
       <div className="rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 p-6 text-white">
-        <h3 className="font-semibold text-lg mb-1">Welcome to TA Platform!</h3>
+        <h3 className="font-semibold text-lg mb-1">¡Bienvenido a la Plataforma AC!</h3>
         <p className="text-white/70 text-sm leading-relaxed">
-          This is your academic hub. More features are being added soon — including course enrollment,
-          TA applications, progress tracking, and collaboration tools.
+          Este es tu centro académico. Próximamente se agregarán más funciones — incluyendo inscripción a cursos,
+          postulaciones de AC, seguimiento de progreso y herramientas de colaboración.
         </p>
       </div>
     </div>

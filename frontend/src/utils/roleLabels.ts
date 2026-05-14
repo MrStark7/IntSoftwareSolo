@@ -1,10 +1,10 @@
 import { Role } from '../types';
 
 export const roleLabels: Record<Role, string> = {
-  STUDENT: 'Student',
-  TEACHING_ASSISTANT: 'Teaching Assistant',
-  PROFESSOR: 'Professor',
-  ADMIN: 'Administrator',
+  STUDENT: 'Estudiante',
+  TEACHING_ASSISTANT: 'Asistente de Cátedra',
+  PROFESSOR: 'Profesor',
+  ADMIN: 'Administrador',
 };
 
 export const roleColors: Record<Role, string> = {

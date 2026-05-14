@@ -35,8 +35,8 @@ const AuthCallbackPage = () => {
         </div>
         <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"
           style={{ borderWidth: '3px' }} />
-        <p className="text-white font-medium">Signing you in...</p>
-        <p className="text-white/50 text-sm mt-1">Please wait a moment</p>
+        <p className="text-white font-medium">Iniciando sesión...</p>
+        <p className="text-white/50 text-sm mt-1">Por favor espera un momento</p>
       </div>
     </div>
   );

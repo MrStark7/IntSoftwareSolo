@@ -11,10 +11,10 @@ const NotFoundPage = () => {
           <GraduationCap size={32} className="text-primary-700" />
         </div>
         <h1 className="text-6xl font-bold text-gray-200 mb-4">404</h1>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Page not found</h2>
-        <p className="text-gray-500 mb-8">The page you're looking for doesn't exist or has been moved.</p>
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Página no encontrada</h2>
+        <p className="text-gray-500 mb-8">La página que buscas no existe o fue movida.</p>
         <button onClick={() => navigate('/')} className="btn-primary">
-          <Home size={16} /> Go home
+          <Home size={16} /> Ir al inicio
         </button>
       </div>
     </div>

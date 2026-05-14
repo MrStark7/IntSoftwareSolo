@@ -23,10 +23,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', to: '/home', icon: Home },
-  { label: 'Profile', to: '/profile', icon: User },
-  { label: 'Courses', to: '/courses', icon: BookOpen, disabled: true },
-  { label: 'Applications', to: '/applications', icon: ClipboardList, disabled: true },
+  { label: 'Inicio', to: '/home', icon: Home },
+  { label: 'Perfil', to: '/profile', icon: User },
+  { label: 'Cursos', to: '/courses', icon: BookOpen, disabled: true },
+  { label: 'Postulaciones', to: '/applications', icon: ClipboardList, disabled: true },
 ];
 
 interface SidebarProps {
@@ -54,8 +54,8 @@ const Sidebar = ({ children }: SidebarProps) => {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <p className="text-sm font-bold text-gray-900 leading-tight">TA Platform</p>
-            <p className="text-xs text-gray-400">University</p>
+            <p className="text-sm font-bold text-gray-900 leading-tight">Plataforma AC</p>
+            <p className="text-xs text-gray-400">Universidad</p>
           </div>
         )}
       </div>
@@ -74,7 +74,7 @@ const Sidebar = ({ children }: SidebarProps) => {
                 <Icon size={18} />
                 {!collapsed && (
                   <span className="flex-1">{item.label}
-                    <span className="ml-2 text-xs bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">Soon</span>
+                    <span className="ml-2 text-xs bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">Pronto</span>
                   </span>
                 )}
               </div>
@@ -121,10 +121,10 @@ const Sidebar = ({ children }: SidebarProps) => {
           className={`flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-sm font-medium
                      text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors
                      ${collapsed ? 'justify-center' : ''}`}
-          title={collapsed ? 'Logout' : undefined}
+          title={collapsed ? 'Cerrar sesión' : undefined}
         >
           <LogOut size={18} />
-          {!collapsed && <span>Logout</span>}
+          {!collapsed && <span>Cerrar sesión</span>}
         </button>
       </div>
     </div>
@@ -184,7 +184,7 @@ const Sidebar = ({ children }: SidebarProps) => {
             <div className="w-7 h-7 rounded-md bg-primary-700 flex items-center justify-center">
               <GraduationCap size={16} className="text-white" />
             </div>
-            <span className="text-sm font-bold text-gray-900">TA Platform</span>
+            <span className="text-sm font-bold text-gray-900">Plataforma AC</span>
           </div>
         </header>
 

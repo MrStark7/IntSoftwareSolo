@@ -24,8 +24,8 @@ const ProfilePage = () => {
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage your personal information and account settings.</p>
+        <h1 className="text-2xl font-bold text-gray-900">Mi Perfil</h1>
+        <p className="text-gray-500 text-sm mt-1">Gestiona tu información personal y configuración de cuenta.</p>
       </div>
 
       {/* Profile card */}
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                          flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors
                          text-gray-400 hover:text-gray-600 cursor-not-allowed"
               disabled
-              title="Photo change coming soon"
+              title="Cambio de foto próximamente"
             >
               <Camera size={14} />
             </button>
@@ -80,7 +80,7 @@ const ProfilePage = () => {
                 <button
                   onClick={() => setEditMode(true)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
-                  title="Edit name"
+                  title="Editar nombre"
                 >
                   <Edit3 size={16} />
                 </button>
@@ -96,16 +96,16 @@ const ProfilePage = () => {
 
       {/* Details */}
       <div className="card">
-        <h3 className="text-base font-semibold text-gray-900 mb-5">Account Information</h3>
+        <h3 className="text-base font-semibold text-gray-900 mb-5">Información de Cuenta</h3>
         <div className="space-y-5">
-          <InfoRow icon={User} label="Full Name" value={user.name} />
-          <InfoRow icon={Mail} label="Email Address" value={user.email} />
-          <InfoRow icon={Shield} label="Role" value={roleLabels[user.role]} badge />
-          <InfoRow icon={Calendar} label="Member Since" value={joinDate} />
+          <InfoRow icon={User} label="Nombre Completo" value={user.name} />
+          <InfoRow icon={Mail} label="Correo Electrónico" value={user.email} />
+          <InfoRow icon={Shield} label="Rol" value={roleLabels[user.role]} badge />
+          <InfoRow icon={Calendar} label="Miembro Desde" value={joinDate} />
           <div className="pt-4 border-t border-gray-100">
             <p className="text-xs text-gray-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-              Account linked via Google — profile photo and primary email managed by Google.
+              Cuenta vinculada mediante Google — la foto y el correo principal son gestionados por Google.
             </p>
           </div>
         </div>
@@ -114,8 +114,8 @@ const ProfilePage = () => {
       {/* Future settings placeholder */}
       <div className="card mt-6 border-dashed border-2 border-gray-200 bg-gray-50">
         <div className="text-center py-4">
-          <p className="text-sm font-medium text-gray-500">Additional settings coming soon</p>
-          <p className="text-xs text-gray-400 mt-1">Notification preferences, privacy controls, and more.</p>
+          <p className="text-sm font-medium text-gray-500">Configuración adicional próximamente</p>
+          <p className="text-xs text-gray-400 mt-1">Preferencias de notificaciones, controles de privacidad y más.</p>
         </div>
       </div>
     </div>

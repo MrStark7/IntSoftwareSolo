@@ -5,26 +5,26 @@ import { authService } from '../services/auth.service';
 const features = [
   {
     icon: BookOpen,
-    title: 'Course Management',
-    description: 'Access course materials, assignments, and academic resources in one place.',
+    title: 'Gestión de Cursos',
+    description: 'Accede a materiales del curso, tareas y recursos académicos en un solo lugar.',
   },
   {
     icon: Users,
-    title: 'Teaching Assistants',
-    description: 'Apply to become a TA and support your peers in their academic journey.',
+    title: 'Asistentes de Cátedra',
+    description: 'Postúlate para ser Asistente de Cátedra y apoya a tus compañeros en su camino académico.',
   },
   {
     icon: Award,
-    title: 'Academic Excellence',
-    description: 'Track your progress, earn recognition, and grow your academic profile.',
+    title: 'Excelencia Académica',
+    description: 'Lleva el seguimiento de tu progreso, obtén reconocimiento y desarrolla tu perfil académico.',
   },
 ];
 
 const benefits = [
-  'Single sign-on with your university Google account',
-  'Real-time notifications for assignments and announcements',
-  'Streamlined TA application process',
-  'Collaborative learning environment',
+  'Inicio de sesión único con tu cuenta Google universitaria',
+  'Notificaciones en tiempo real sobre tareas y anuncios',
+  'Proceso de postulación a Asistente de Cátedra simplificado',
+  'Entorno de aprendizaje colaborativo',
 ];
 
 const LandingPage = () => {
@@ -45,7 +45,7 @@ const LandingPage = () => {
             onClick={() => authService.loginWithGoogle()}
             className="btn-primary py-2 px-5 text-sm"
           >
-            Sign in
+            Ingresar
           </button>
         </div>
       </nav>
@@ -65,17 +65,17 @@ const LandingPage = () => {
             <div className="inline-flex items-center gap-2 bg-white/10 text-white/90 text-xs font-medium
                             px-3 py-1.5 rounded-full border border-white/20 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              University Academic Platform
+              Plataforma Académica Universitaria
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Empower Your
-              <span className="block text-yellow-300">Academic Journey</span>
+              Impulsa tu
+              <span className="block text-yellow-300">Camino Académico</span>
             </h1>
 
             <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-xl">
-              The all-in-one platform for students, teaching assistants, and professors.
-              Manage courses, apply for TA positions, and collaborate seamlessly.
+              La plataforma integral para estudiantes, asistentes de cátedra y profesores.
+              Gestiona cursos, postúlate como AC y colabora sin complicaciones.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -92,7 +92,7 @@ const LandingPage = () => {
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                Continue with Google
+                Ingresar con Google
               </button>
 
               <button
@@ -101,7 +101,7 @@ const LandingPage = () => {
                            border border-white/30 text-white font-semibold text-base
                            hover:bg-white/10 transition-all duration-200"
               >
-                Learn more <ArrowRight size={18} />
+                Más información <ArrowRight size={18} />
               </button>
             </div>
           </div>
@@ -119,9 +119,9 @@ const LandingPage = () => {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Everything you need</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Todo lo que necesitas</h2>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
-              A comprehensive platform designed specifically for university academic workflows.
+              Una plataforma completa diseñada específicamente para los flujos de trabajo académico universitario.
             </p>
           </div>
 
@@ -148,11 +148,11 @@ const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Built for the modern university
+                Construida para la universidad moderna
               </h2>
               <p className="text-gray-500 text-lg mb-8 leading-relaxed">
-                Streamline academic operations with a platform that understands the needs
-                of students, TAs, and faculty alike.
+                Optimiza las operaciones académicas con una plataforma que entiende
+                las necesidades de estudiantes, asistentes y docentes.
               </p>
               <ul className="space-y-4">
                 {benefits.map((benefit) => (
@@ -166,7 +166,7 @@ const LandingPage = () => {
                 onClick={() => authService.loginWithGoogle()}
                 className="btn-primary mt-10"
               >
-                Get started for free <ArrowRight size={16} />
+                Comenzar gratis <ArrowRight size={16} />
               </button>
             </div>
 
@@ -187,7 +187,7 @@ const LandingPage = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  {['Courses', 'TA Apps', 'Grades', 'Schedule'].map((item) => (
+                  {['Cursos', 'Postulaciones', 'Calificaciones', 'Horario'].map((item) => (
                     <div key={item} className="bg-white/10 rounded-lg p-4 text-center">
                       <div className="h-6 w-6 rounded bg-white/20 mx-auto mb-2" />
                       <p className="text-white/70 text-xs">{item}</p>
@@ -205,9 +205,9 @@ const LandingPage = () => {
       {/* CTA */}
       <section className="py-24 bg-primary-950">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">¿Listo para comenzar?</h2>
           <p className="text-white/60 text-lg mb-10">
-            Join your university community on the TA Platform today.
+            Únete hoy a tu comunidad universitaria en la Plataforma AC.
           </p>
           <button
             onClick={() => authService.loginWithGoogle()}
@@ -221,7 +221,7 @@ const LandingPage = () => {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Sign in with Google
+                Ingresar con Google
           </button>
         </div>
       </section>
@@ -230,7 +230,7 @@ const LandingPage = () => {
       <footer className="bg-primary-950 border-t border-white/5 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-white/30 text-sm">
-            © {new Date().getFullYear()} TA Platform. University Academic System.
+            © {new Date().getFullYear()} Plataforma AC. Sistema Académico Universitario.
           </p>
         </div>
       </footer>
