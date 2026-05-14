@@ -1,8 +1,6 @@
-# University Teaching Assistant Platform
+# Plataforma de integracion para Ayudantias
 
-A production-ready fullstack monorepo for a university teaching assistant application and assignment platform.
-
-## Project Structure
+## Estructura
 
 ```
 /
@@ -11,7 +9,7 @@ A production-ready fullstack monorepo for a university teaching assistant applic
 └── README.md
 ```
 
-## Tech Stack
+## Stack tecnologico
 
 ### Frontend
 - React 18 + TypeScript
@@ -30,7 +28,7 @@ A production-ready fullstack monorepo for a university teaching assistant applic
 
 ---
 
-## Prerequisites
+## Requisitos evaluados
 
 - Node.js >= 18.x
 - PostgreSQL >= 14
@@ -38,19 +36,19 @@ A production-ready fullstack monorepo for a university teaching assistant applic
 
 ---
 
-## Setup Instructions
+## Configuracion de instalacion
 
-### 1. Clone and install
+### 1. Clonar e instalar repositorio
 
 ```bash
-# Install frontend dependencies
+# Instalar dependencias Frontend
 cd frontend && npm install
 
-# Install backend dependencies
+# Instalar dependencias backend 
 cd ../backend && npm install
 ```
 
-### 2. Configure environment variables
+### 2. Variables de entorno
 
 **Backend:**
 ```bash
@@ -64,7 +62,7 @@ cp frontend/.env.example frontend/.env
 # Fill in your values
 ```
 
-### 3. Setup the database
+### 3. Base de datos
 
 ```bash
 cd backend
@@ -72,7 +70,7 @@ npx prisma migrate dev --name init
 npx prisma generate
 ```
 
-### 4. Run the application
+### 4. Ejecutar
 
 ```bash
 # Terminal 1 — Backend
@@ -82,7 +80,7 @@ cd backend && npm run start:dev
 cd frontend && npm run dev
 ```
 
-### 5. Access the app
+### 5.Acceder
 
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3000
