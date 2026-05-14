@@ -6,7 +6,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #000d18 0%, #003057 60%, #267A8A 100%)' }}>
       <div className="w-full max-w-md">
         {/* Back button */}
         <button
@@ -28,10 +28,13 @@ const LoginPage = () => {
           <button
             onClick={() => authService.loginWithGoogle()}
             className="w-full flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl
-                       border-2 border-gray-200 bg-white text-gray-700 font-semibold
-                       hover:bg-gray-50 hover:border-gray-300 transition-all duration-200
-                       focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+                       border-2 bg-white font-semibold
+                       hover:bg-ucn-tealLight transition-all duration-200
+                       focus:outline-none focus:ring-2 focus:ring-offset-2
                        shadow-sm"
+            style={{ borderColor: '#003057', color: '#003057' }}
+            onFocus={e => (e.currentTarget.style.boxShadow = '0 0 0 3px #3499AB55')}
+            onBlur={e => (e.currentTarget.style.boxShadow = '')}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -45,9 +48,9 @@ const LoginPage = () => {
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
             <p className="text-xs text-gray-400">
               Al ingresar, aceptas los{' '}
-              <span className="text-primary-600 hover:underline cursor-pointer">Términos de Servicio</span>{' '}
+              <span className="hover:underline cursor-pointer" style={{ color: '#3499AB' }}>Términos de Servicio</span>{' '}
               y la{' '}
-              <span className="text-primary-600 hover:underline cursor-pointer">Política de Privacidad</span>{' '}
+              <span className="hover:underline cursor-pointer" style={{ color: '#3499AB' }}>Política de Privacidad</span>{' '}
               de la universidad.
             </p>
           </div>

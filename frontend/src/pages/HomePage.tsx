@@ -155,7 +155,7 @@ const HomePage = () => {
       </div>
 
       {/* Welcome notice */}
-      <div className="rounded-xl bg-gradient-to-r from-primary-700 to-primary-600 p-6 text-white">
+      <div className="rounded-xl p-6 text-white" style={{ background: 'linear-gradient(135deg, #003057 0%, #267A8A 100%)' }}>
         <h3 className="font-semibold text-lg mb-1">¡Bienvenido a la Plataforma AC!</h3>
         <p className="text-white/70 text-sm leading-relaxed">
           Este es tu centro académico. Próximamente se agregarán más funciones — incluyendo inscripción a cursos,

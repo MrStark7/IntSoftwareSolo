@@ -27,17 +27,24 @@ const benefits = [
   'Entorno de aprendizaje colaborativo',
 ];
 
+const GoogleIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+  </svg>
+);
+
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto" />
-          </div>
+          <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto" />
           <button
             onClick={() => authService.loginWithGoogle()}
             className="btn-primary py-2 px-5 text-sm"
@@ -47,9 +54,9 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero — gradiente UCN navy → teal */}
       <section className="relative pt-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-800 to-primary-600" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #000d18 0%, #003057 55%, #267A8A 100%)' }} />
         <div className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: 'radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)',
@@ -61,13 +68,13 @@ const LandingPage = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 text-white/90 text-xs font-medium
                             px-3 py-1.5 rounded-full border border-white/20 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#3499AB' }} />
               Plataforma Académica Universitaria
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Impulsa tu
-              <span className="block text-yellow-300">Camino Académico</span>
+              <span className="block" style={{ color: '#3499AB' }}>Camino Académico</span>
             </h1>
 
             <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-xl">
@@ -79,16 +86,11 @@ const LandingPage = () => {
               <button
                 onClick={() => authService.loginWithGoogle()}
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
-                           bg-white text-primary-800 font-semibold text-base
-                           hover:bg-gray-50 transition-all duration-200 shadow-lg shadow-black/20
+                           bg-white text-ucn-navy font-semibold text-base
+                           hover:bg-ucn-tealLight transition-all duration-200 shadow-lg shadow-black/20
                            focus:outline-none focus:ring-2 focus:ring-white/50"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
+                <GoogleIcon />
                 Ingresar con Google
               </button>
 
@@ -116,7 +118,7 @@ const LandingPage = () => {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Todo lo que necesitas</h2>
+            <h2 className="text-3xl font-bold mb-4" style={{ color: '#003057' }}>Todo lo que necesitas</h2>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
               Una plataforma completa diseñada específicamente para los flujos de trabajo académico universitario.
             </p>
@@ -126,9 +128,15 @@ const LandingPage = () => {
             {features.map((feature) => {
               const Icon = feature.icon;
               return (
-                <div key={feature.title} className="group p-8 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-primary-50 group-hover:bg-primary-100 flex items-center justify-center mb-5 transition-colors">
-                    <Icon size={24} className="text-primary-700" />
+                <div key={feature.title}
+                  className="group p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300"
+                  style={{ ['--tw-border-opacity' as string]: '1' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = '#3499AB')}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = '')}
+                >
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors"
+                    style={{ backgroundColor: '#E6F4F7' }}>
+                    <Icon size={24} style={{ color: '#003057' }} />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
                   <p className="text-gray-500 leading-relaxed">{feature.description}</p>
@@ -140,7 +148,7 @@ const LandingPage = () => {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24" style={{ backgroundColor: '#f0f7f9' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -154,7 +162,7 @@ const LandingPage = () => {
               <ul className="space-y-4">
                 {benefits.map((benefit) => (
                   <li key={benefit} className="flex items-center gap-3">
-                    <CheckCircle size={20} className="text-green-500 flex-shrink-0" />
+                    <CheckCircle size={20} className="flex-shrink-0" style={{ color: '#3499AB' }} />
                     <span className="text-gray-700">{benefit}</span>
                   </li>
                 ))}
@@ -167,8 +175,9 @@ const LandingPage = () => {
               </button>
             </div>
 
+            {/* Mock UI card */}
             <div className="relative">
-              <div className="rounded-2xl bg-gradient-to-br from-primary-700 to-primary-900 p-8 shadow-2xl">
+              <div className="rounded-2xl p-8 shadow-2xl" style={{ background: 'linear-gradient(135deg, #003057 0%, #267A8A 100%)' }}>
                 <div className="bg-white/10 rounded-xl p-6 mb-4">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full bg-white/20" />
@@ -192,15 +201,15 @@ const LandingPage = () => {
                   ))}
                 </div>
               </div>
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl" />
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary-300/20 rounded-full blur-2xl" />
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full blur-2xl" style={{ backgroundColor: '#3499AB33' }} />
+              <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full blur-2xl" style={{ backgroundColor: '#00305733' }} />
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-primary-950">
+      <section className="py-24" style={{ backgroundColor: '#000d18' }}>
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">¿Listo para comenzar?</h2>
           <p className="text-white/60 text-lg mb-10">
@@ -209,22 +218,18 @@ const LandingPage = () => {
           <button
             onClick={() => authService.loginWithGoogle()}
             className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl
-                       bg-white text-primary-900 font-semibold text-base
-                       hover:bg-gray-100 transition-all duration-200 shadow-lg"
+                       bg-white font-semibold text-base
+                       hover:bg-ucn-tealLight transition-all duration-200 shadow-lg"
+            style={{ color: '#003057' }}
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-                Ingresar con Google
+            <GoogleIcon />
+            Ingresar con Google
           </button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-primary-950 border-t border-white/5 py-8">
+      <footer className="border-t py-8" style={{ backgroundColor: '#000d18', borderColor: '#ffffff0d' }}>
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex flex-col items-center gap-3">
             <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto opacity-60 brightness-0 invert" />

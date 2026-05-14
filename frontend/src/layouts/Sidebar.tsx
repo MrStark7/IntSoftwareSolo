@@ -117,6 +117,7 @@ const Sidebar = ({ children }: SidebarProps) => {
                      text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors
                      ${collapsed ? 'justify-center' : ''}`}
           title={collapsed ? 'Cerrar sesión' : undefined}
+          style={{} as React.CSSProperties}
         >
           <LogOut size={18} />
           {!collapsed && <span>Cerrar sesión</span>}

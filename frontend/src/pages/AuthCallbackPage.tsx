@@ -27,7 +27,7 @@ const AuthCallbackPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-950 to-primary-800">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #000d18 0%, #003057 60%, #267A8A 100%)' }}>
       <div className="text-center">
         <div className="mb-6">
           <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-14 w-auto mx-auto brightness-0 invert opacity-90" />

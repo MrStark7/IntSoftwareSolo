@@ -7,24 +7,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        /* Paleta institucional UCN — Pantone 540C + Escuela de Ingeniería */
         primary: {
-          50:  '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          50:  '#e6edf4',
+          100: '#ccdae9',
+          200: '#99b5d3',
+          300: '#6690bd',
+          400: '#336ba7',
+          500: '#004b8d',
+          600: '#003d75',
+          700: '#003057',   /* Pantone 540C — color UCN oficial */
+          800: '#002340',
+          900: '#001628',
+          950: '#000d18',
         },
-        university: {
-          blue:   '#003087',
-          gold:   '#FFD700',
-          light:  '#E8F0FE',
-          dark:   '#001a4d',
+        ucn: {
+          navy:   '#003057',   /* Pantone 540C — primario */
+          teal:   '#3499AB',   /* Teal Escuela de Ingeniería */
+          tealDark: '#267A8A',
+          tealLight: '#E6F4F7',
+          dark:   '#001628',
+          gray:   '#3D3D3D',   /* Texto oscuro del logo */
         },
       },
       fontFamily: {

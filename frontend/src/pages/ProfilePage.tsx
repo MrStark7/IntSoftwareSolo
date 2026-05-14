@@ -40,8 +40,8 @@ const ProfilePage = () => {
                 className="w-24 h-24 rounded-2xl object-cover shadow-md"
               />
             ) : (
-              <div className="w-24 h-24 rounded-2xl bg-primary-100 flex items-center justify-center shadow-md">
-                <span className="text-primary-700 text-3xl font-bold">
+              <div className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-md" style={{ backgroundColor: '#E6F4F7' }}>
+                <span className="text-3xl font-bold" style={{ color: '#003057' }}>
                   {user.name.charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -137,7 +137,7 @@ const InfoRow = ({ icon: Icon, label, value, badge }: InfoRowProps) => (
     <div className="flex-1 min-w-0">
       <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{label}</p>
       {badge ? (
-        <span className="inline-block text-sm font-semibold text-primary-700 bg-primary-50 px-2.5 py-0.5 rounded-full mt-0.5">
+            <span className="inline-block text-sm font-semibold px-2.5 py-0.5 rounded-full mt-0.5" style={{ color: '#003057', backgroundColor: '#E6F4F7' }}>
           {value}
         </span>
       ) : (
