@@ -8,7 +8,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  GraduationCap,
   Menu,
   X,
   type LucideIcon,
@@ -48,15 +47,11 @@ const Sidebar = ({ children }: SidebarProps) => {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className={`flex items-center gap-3 px-4 py-5 border-b border-gray-100 ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 rounded-lg bg-primary-700 flex items-center justify-center flex-shrink-0">
-          <GraduationCap size={20} className="text-white" />
-        </div>
-        {!collapsed && (
-          <div className="overflow-hidden">
-            <p className="text-sm font-bold text-gray-900 leading-tight">Plataforma AC</p>
-            <p className="text-xs text-gray-400">Universidad</p>
-          </div>
+      <div className={`flex items-center px-4 py-4 border-b border-gray-100 ${collapsed ? 'justify-center' : ''}`}>
+        {collapsed ? (
+          <img src="/logo-ucn.png" alt="UCN" className="h-8 w-8 object-contain" />
+        ) : (
+          <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto max-w-[160px] object-contain" />
         )}
       </div>
 
@@ -180,12 +175,7 @@ const Sidebar = ({ children }: SidebarProps) => {
           <button onClick={() => setMobileOpen(true)} className="text-gray-500 hover:text-gray-700">
             <Menu size={22} />
           </button>
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-primary-700 flex items-center justify-center">
-              <GraduationCap size={16} className="text-white" />
-            </div>
-            <span className="text-sm font-bold text-gray-900">Plataforma AC</span>
-          </div>
+          <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-8 w-auto object-contain" />
         </header>
 
         <main className="flex-1 overflow-auto p-4 lg:p-8 animate-fade-in">

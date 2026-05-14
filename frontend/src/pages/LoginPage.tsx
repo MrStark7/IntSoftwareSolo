@@ -1,4 +1,4 @@
-import { GraduationCap, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/auth.service';
 
@@ -19,9 +19,7 @@ const LoginPage = () => {
         <div className="bg-white rounded-2xl shadow-2xl p-8 animate-slide-up">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-14 h-14 rounded-2xl bg-primary-700 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-900/30">
-              <GraduationCap size={28} className="text-white" />
-            </div>
+            <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-14 w-auto mx-auto mb-5" />
             <h1 className="text-2xl font-bold text-gray-900">Bienvenido</h1>
             <p className="text-gray-500 mt-1">Inicia sesión para acceder a tu plataforma académica</p>
           </div>

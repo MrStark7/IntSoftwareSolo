@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { GraduationCap, BookOpen, Users, Award, ArrowRight, CheckCircle } from 'lucide-react';
+import { BookOpen, Users, Award, ArrowRight, CheckCircle } from 'lucide-react';
 import { authService } from '../services/auth.service';
 
 const features = [
@@ -35,11 +35,8 @@ const LandingPage = () => {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center">
-              <GraduationCap size={18} className="text-white" />
-            </div>
-            <span className="text-lg font-bold text-gray-900">TA Platform</span>
+          <div className="flex items-center">
+            <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto" />
           </div>
           <button
             onClick={() => authService.loginWithGoogle()}
@@ -229,9 +226,12 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-primary-950 border-t border-white/5 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-white/30 text-sm">
-            © {new Date().getFullYear()} Plataforma AC. Sistema Académico Universitario.
-          </p>
+          <div className="flex flex-col items-center gap-3">
+            <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-10 w-auto opacity-60 brightness-0 invert" />
+            <p className="text-white/30 text-sm">
+              © {new Date().getFullYear()} Escuela de Ingeniería UCN Coquimbo. Todos los derechos reservados.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

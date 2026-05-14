@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
-import { GraduationCap } from 'lucide-react';
 
 const AuthCallbackPage = () => {
   const [searchParams] = useSearchParams();
@@ -30,8 +29,8 @@ const AuthCallbackPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-950 to-primary-800">
       <div className="text-center">
-        <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6">
-          <GraduationCap size={32} className="text-white" />
+        <div className="mb-6">
+          <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-14 w-auto mx-auto brightness-0 invert opacity-90" />
         </div>
         <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"
           style={{ borderWidth: '3px' }} />
