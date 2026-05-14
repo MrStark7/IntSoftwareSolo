@@ -32,8 +32,8 @@ const AuthCallbackPage = () => {
         <div className="mb-6">
           <img src="/logo-ucn.png" alt="UCN Coquimbo" className="h-14 w-auto mx-auto brightness-0 invert opacity-90" />
         </div>
-        <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"
-          style={{ borderWidth: '3px' }} />
+        <div className="w-8 h-8 rounded-full animate-spin mx-auto mb-4"
+          style={{ border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
         <p className="text-white font-medium">Iniciando sesión...</p>
         <p className="text-white/50 text-sm mt-1">Por favor espera un momento</p>
       </div>

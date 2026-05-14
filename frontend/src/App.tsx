@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/auth.store';
 
@@ -14,24 +14,29 @@ import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
-  const { initialize } = useAuthStore();
+  const initialize = useAuthStore((s) => s.initialize);
+
+  // Stable reference — only runs once on mount
+  const stableInit = useCallback(() => {
+    initialize();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    initialize();
-  }, []);
+    stableInit();
+  }, [stableInit]);
 
   return (
     <Routes>
-      {/* Public routes */}
+      {/* Public-only routes (redirect to /home if already authenticated) */}
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
-      {/* OAuth callback — always accessible */}
+      {/* OAuth callback — must be outside PublicRoute to avoid redirect loop */}
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-      {/* Protected routes with sidebar layout */}
+      {/* Protected routes wrapped in the sidebar layout */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<HomePage />} />
@@ -39,7 +44,7 @@ const App = () => {
         </Route>
       </Route>
 
-      {/* Fallbacks */}
+      {/* Convenience redirects */}
       <Route path="/dashboard" element={<Navigate to="/home" replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

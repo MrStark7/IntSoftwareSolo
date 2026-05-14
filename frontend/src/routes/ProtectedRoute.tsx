@@ -8,8 +8,10 @@ const ProtectedRoute = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 text-sm">Cargando...</p>
+          <img src="/logo-ucn.png" alt="UCN" className="h-10 w-auto opacity-60" />
+          <div className="w-10 h-10 rounded-full animate-spin border-4"
+            style={{ borderColor: '#E6F4F7', borderTopColor: '#003057' }} />
+          <p className="text-sm" style={{ color: '#003057' }}>Cargando...</p>
         </div>
       </div>
     );

@@ -87,7 +87,7 @@ const LandingPage = () => {
                 onClick={() => authService.loginWithGoogle()}
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
                            bg-white text-ucn-navy font-semibold text-base
-                           hover:bg-ucn-tealLight transition-all duration-200 shadow-lg shadow-black/20
+                           hover:bg-ucn-teal-light transition-all duration-200 shadow-lg shadow-black/20
                            focus:outline-none focus:ring-2 focus:ring-white/50"
               >
                 <GoogleIcon />
@@ -219,7 +219,7 @@ const LandingPage = () => {
             onClick={() => authService.loginWithGoogle()}
             className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl
                        bg-white font-semibold text-base
-                       hover:bg-ucn-tealLight transition-all duration-200 shadow-lg"
+                       hover:bg-ucn-teal-light transition-all duration-200 shadow-lg"
             style={{ color: '#003057' }}
           >
             <GoogleIcon />

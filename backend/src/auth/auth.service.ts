@@ -16,6 +16,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
+  // Returns a safe public representation of the user — never exposes googleId.
   getProfile(user: User) {
     return {
       id: user.id,
@@ -24,6 +25,7 @@ export class AuthService {
       avatar: user.avatar,
       role: user.role,
       createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 }

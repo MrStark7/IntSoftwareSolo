@@ -29,7 +29,7 @@
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
            border border-gray-300 bg-white text-ucn-navy font-semibold text-sm
-           hover:bg-ucn-tealLight active:bg-gray-100
+           hover:bg-ucn-teal-light active:bg-gray-100
            transition-all duration-200 ease-in-out
            focus:outline-none focus:ring-2 focus:ring-ucn-teal focus:ring-offset-2;
   }
@@ -40,11 +40,11 @@
 
   .sidebar-link {
     @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-           text-gray-600 hover:bg-ucn-tealLight hover:text-ucn-navy
+           text-gray-600 hover:bg-ucn-teal-light hover:text-ucn-navy
            transition-all duration-150 ease-in-out;
   }
 
   .sidebar-link.active {
-    @apply bg-ucn-tealLight text-ucn-navy font-semibold border-l-2 border-ucn-teal;
+    @apply bg-ucn-teal-light text-ucn-navy font-semibold border-l-2 border-ucn-teal;
   }
 }
