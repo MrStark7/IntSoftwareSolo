@@ -20,9 +20,57 @@ model User {
   @@map("users")
 }
 
+model Offer {
+  id               String        @id @default(cuid())
+  courseCode       String
+  courseName       String
+  nrc              String
+  professorEmail   String
+  professorName    String
+  vacancies        Int
+  description      String
+  applicationStart DateTime
+  applicationEnd   DateTime
+  status           OfferStatus   @default(DRAFT)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  applications     Application[]
+
+  @@map("offers")
+}
+
+model Application {
+  id           String            @id @default(cuid())
+  offerId      String
+  studentEmail String
+  studentRut   String
+  studentName  String
+  status       ApplicationStatus @default(PENDING)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  offer        Offer             @relation(fields: [offerId], references: [id], onDelete: Cascade)
+
+  @@unique([offerId, studentEmail])
+  @@map("applications")
+}
+
 enum Role {
   STUDENT
   TEACHING_ASSISTANT
   PROFESSOR
   ADMIN
+}
+
+enum OfferStatus {
+  DRAFT
+  OPEN
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

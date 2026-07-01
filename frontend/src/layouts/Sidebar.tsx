@@ -5,6 +5,7 @@ import {
   User,
   BookOpen,
   ClipboardList,
+  FileText,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -22,10 +23,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Inicio', to: '/home', icon: Home },
-  { label: 'Perfil', to: '/profile', icon: User },
-  { label: 'Cursos', to: '/courses', icon: BookOpen, disabled: true },
-  { label: 'Postulaciones', to: '/applications', icon: ClipboardList, disabled: true },
+  { label: 'Inicio',              to: '/home',             icon: Home },
+  { label: 'Perfil',             to: '/profile',          icon: User },
+  { label: 'Ofertas',            to: '/offers',           icon: ClipboardList },
+  { label: 'Mis Postulaciones',  to: '/my-applications',  icon: FileText },
+  { label: 'Cursos',             to: '/courses',          icon: BookOpen,    disabled: true },
 ];
 
 interface SidebarProps {

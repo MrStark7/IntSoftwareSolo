@@ -11,6 +11,9 @@ import LoginPage from './pages/LoginPage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
+import OffersPage from './pages/OffersPage';
+import OfferDetailPage from './pages/OfferDetailPage';
+import MyApplicationsPage from './pages/MyApplicationsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -41,6 +44,9 @@ const App = () => {
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/offers" element={<OffersPage />} />
+          <Route path="/offers/:id" element={<OfferDetailPage />} />
+          <Route path="/my-applications" element={<MyApplicationsPage />} />
         </Route>
       </Route>
 
