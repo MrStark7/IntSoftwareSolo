@@ -14,6 +14,14 @@ export const applicationService = {
     return data;
   },
 
+  /** Ayudantías asignadas — solo postulaciones APPROVED del estudiante autenticado. */
+  getMyAssistantships: async (): Promise<ApplicationWithOffer[]> => {
+    const { data } = await api.get<ApplicationWithOffer[]>(
+      '/applications/my-assistantships',
+    );
+    return data;
+  },
+
   apply: async (offerId: string): Promise<{ id: string }> => {
     const { data } = await api.post<{ id: string }>('/applications', { offerId });
     return data;

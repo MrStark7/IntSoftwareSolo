@@ -134,6 +134,19 @@ export class ApplicationService {
     }) as Promise<ApplicationWithOffer[]>;
   }
 
+  // ─── Mis ayudantías (estudiante — solo postulaciones APPROVED) ────────────
+
+  async findMyAssistantships(user: User): Promise<ApplicationWithOffer[]> {
+    return this.prisma.application.findMany({
+      where: {
+        studentEmail: user.email.toLowerCase(),
+        status: 'APPROVED',
+      },
+      include: { offer: true },
+      orderBy: { updatedAt: 'desc' },
+    }) as Promise<ApplicationWithOffer[]>;
+  }
+
   // ─── Postulaciones de una oferta (profesor propietario) ───────────────────
 
   async findByOffer(

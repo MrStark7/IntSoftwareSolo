@@ -1,6 +1,14 @@
-import { BookOpen, ClipboardList, Users, Bell, TrendingUp, Clock } from 'lucide-react';
+import { BookOpen, ClipboardList, Users, Bell, TrendingUp, Clock, GraduationCap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { roleLabels, roleColors } from '../utils/roleLabels';
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const isProfessorEmail = (email: string | undefined): boolean =>
+  email?.toLowerCase().endsWith('@ucn.cl') ?? false;
+
+// ─── Stat cards (estáticas — próximamente) ────────────────────────────────────
 
 const statCards = [
   {
@@ -33,22 +41,36 @@ const statCards = [
   },
 ];
 
-const quickActions = [
+// ─── Quick action definitions ─────────────────────────────────────────────────
+
+interface QuickAction {
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  color: string;
+  iconColor: string;
+  soon: boolean;
+  path?: string;
+}
+
+const STUDENT_ACTIONS: QuickAction[] = [
   {
     label: 'Postularme como AC',
-    description: 'Envía tu solicitud para ser Asistente de Cátedra',
+    description: 'Revisa las ofertas disponibles y envía tu solicitud',
     icon: ClipboardList,
     color: 'border-purple-200 hover:border-purple-400 hover:bg-purple-50',
     iconColor: 'text-purple-600',
-    soon: true,
+    soon: false,
+    path: '/offers',
   },
   {
-    label: 'Ver Cursos',
-    description: 'Navega y gestiona tus cursos inscritos',
-    icon: BookOpen,
+    label: 'Mis Ayudantías',
+    description: 'Visualiza las ayudantías donde fuiste seleccionado',
+    icon: GraduationCap,
     color: 'border-blue-200 hover:border-blue-400 hover:bg-blue-50',
     iconColor: 'text-blue-600',
-    soon: true,
+    soon: false,
+    path: '/student/assistantships',
   },
   {
     label: 'Mi Progreso',
@@ -68,8 +90,42 @@ const quickActions = [
   },
 ];
 
+const PROFESSOR_ACTIONS: QuickAction[] = [
+  {
+    label: 'Mis Cursos',
+    description: 'Administra los cursos donde impartes docencia',
+    icon: BookOpen,
+    color: 'border-blue-200 hover:border-blue-400 hover:bg-blue-50',
+    iconColor: 'text-blue-600',
+    soon: false,
+    path: '/professor/courses',
+  },
+  {
+    label: 'Mi Progreso',
+    description: 'Monitorea el rendimiento de tus estudiantes',
+    icon: TrendingUp,
+    color: 'border-green-200 hover:border-green-400 hover:bg-green-50',
+    iconColor: 'text-green-600',
+    soon: true,
+  },
+  {
+    label: 'Horario',
+    description: 'Revisa tus próximas clases y fechas límite',
+    icon: Clock,
+    color: 'border-orange-200 hover:border-orange-400 hover:bg-orange-50',
+    iconColor: 'text-orange-600',
+    soon: true,
+  },
+];
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 const HomePage = () => {
   const { user } = useAuth();
+  const navigate  = useNavigate();
+
+  const isProfessor   = isProfessorEmail(user?.email);
+  const quickActions  = isProfessor ? PROFESSOR_ACTIONS : STUDENT_ACTIONS;
 
   const greeting = () => {
     const hour = new Date().getHours();
@@ -98,7 +154,7 @@ const HomePage = () => {
           )}
           <div>
             <p className="text-gray-500 text-sm">{greeting()}</p>
-            <h1 className="text-2xl font-bold text-gray-900">{user?.name || 'Estudiante'}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{user?.name || 'Usuario'}</h1>
             {user?.role && (
               <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mt-1 ${roleColors[user.role]}`}>
                 {roleLabels[user.role]}
@@ -131,18 +187,34 @@ const HomePage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
-            return (
-              <button
-                key={action.label}
-                disabled={action.soon}
-                className={`relative text-left p-5 rounded-xl border-2 bg-white transition-all duration-200 cursor-not-allowed
-                            ${action.color} opacity-80`}
-              >
-                {action.soon && (
+
+            if (action.soon) {
+              // Disabled card — same visual as before
+              return (
+                <button
+                  key={action.label}
+                  disabled
+                  className={`relative text-left p-5 rounded-xl border-2 bg-white transition-all duration-200 cursor-not-allowed ${action.color} opacity-80`}
+                >
                   <span className="absolute top-3 right-3 text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">
                     Próximamente
                   </span>
-                )}
+                  <div className={`w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 ${action.iconColor}`}>
+                    <Icon size={20} />
+                  </div>
+                  <p className="font-semibold text-gray-900">{action.label}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">{action.description}</p>
+                </button>
+              );
+            }
+
+            // Enabled card — clickable
+            return (
+              <button
+                key={action.label}
+                onClick={() => action.path && navigate(action.path)}
+                className={`relative text-left p-5 rounded-xl border-2 bg-white transition-all duration-200 cursor-pointer ${action.color}`}
+              >
                 <div className={`w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 ${action.iconColor}`}>
                   <Icon size={20} />
                 </div>
@@ -159,7 +231,7 @@ const HomePage = () => {
         <h3 className="font-semibold text-lg mb-1">¡Bienvenido a la Plataforma AC!</h3>
         <p className="text-white/70 text-sm leading-relaxed">
           Este es tu centro académico. Próximamente se agregarán más funciones — incluyendo inscripción a cursos,
-          postulaciones de AC, seguimiento de progreso y herramientas de colaboración.
+          seguimiento de progreso y herramientas de colaboración.
         </p>
       </div>
     </div>

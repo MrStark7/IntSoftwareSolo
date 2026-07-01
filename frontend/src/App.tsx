@@ -18,6 +18,7 @@ import ProfessorCoursesPage from './pages/ProfessorCoursesPage';
 import ProfessorOffersPage from './pages/ProfessorOffersPage';
 import ProfessorOfferDetailPage from './pages/ProfessorOfferDetailPage';
 import CreateOfferPage from './pages/CreateOfferPage';
+import StudentAssistantshipsPage from './pages/StudentAssistantshipsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/offers/:id" element={<OfferDetailPage />} />
           <Route path="/my-applications" element={<MyApplicationsPage />} />
+          <Route path="/student/assistantships" element={<StudentAssistantshipsPage />} />
 
           {/* Professor routes */}
           <Route path="/professor/courses" element={<ProfessorCoursesPage />} />

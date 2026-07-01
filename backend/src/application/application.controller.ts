@@ -27,6 +27,12 @@ export class ApplicationController {
     return this.applicationService.findMyApplications(req.user);
   }
 
+  /** Ayudantías asignadas — solo postulaciones APPROVED del estudiante autenticado. */
+  @Get('my-assistantships')
+  findMyAssistantships(@Request() req) {
+    return this.applicationService.findMyAssistantships(req.user);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() dto: CreateApplicationDto, @Request() req) {
