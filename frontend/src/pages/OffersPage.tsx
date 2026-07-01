@@ -94,8 +94,10 @@ const OffersPage = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  // Las ofertas CLOSED no deben aparecer en la vista del estudiante.
+  // Solo se muestran las OPEN (disponibles para postular) y las DRAFT (visibilidad informativa).
   const openOffers  = offers.filter((o) => o.status === 'OPEN');
-  const otherOffers = offers.filter((o) => o.status !== 'OPEN');
+  const otherOffers = offers.filter((o) => o.status === 'DRAFT');
 
   return (
     <div className="max-w-5xl mx-auto animate-fade-in">
@@ -151,11 +153,11 @@ const OffersPage = () => {
         </section>
       )}
 
-      {/* Other offers */}
+      {/* Draft offers (not yet open) */}
       {!loading && !error && otherOffers.length > 0 && (
         <section>
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-            Otras ofertas ({otherOffers.length})
+            Próximamente ({otherOffers.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {otherOffers.map((offer) => (

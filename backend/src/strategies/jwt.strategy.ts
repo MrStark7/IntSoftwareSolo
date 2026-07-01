@@ -8,6 +8,14 @@ export interface JwtPayload {
   sub: string;
   email: string;
   name: string;
+  /**
+   * RUT del usuario. Actualmente solo se incluye en el JWT del Profesor Demo.
+   * TODO: Cuando se implemente la resolución institucional de identidad, este campo
+   *       será poblado automáticamente por el servicio de autenticación institucional,
+   *       eliminando la necesidad de DEMO_PROFESSOR_RUT en las variables de entorno.
+   *       El resto del sistema (TeacherService, etc.) no requerirá modificaciones.
+   */
+  rut?: string;
 }
 
 @Injectable()
@@ -27,6 +35,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = await this.usersService.findById(payload.sub);
     if (!user) {
       throw new UnauthorizedException('User not found');
+    }
+    // Attach rut from the JWT payload when present.
+    // This allows TeacherService and future services to use req.user.rut
+    // without consulting environment variables once institutional auth is implemented.
+    if (payload.rut) {
+      return { ...user, rut: payload.rut };
     }
     return user;
   }

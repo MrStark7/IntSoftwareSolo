@@ -1,17 +1,44 @@
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, AlertCircle, FlaskConical, GraduationCap, BookOpen } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { authService } from '../services/auth.service';
+import { authService, DemoUserType } from '../services/auth.service';
+import { useAuthStore } from '../store/auth.store';
 
 const errorMessages: Record<string, string> = {
   auth_failed: 'No se pudo autenticar con Google. Intenta nuevamente.',
   server_error: 'Error interno del servidor. Intenta en unos momentos.',
 };
 
+const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { setToken, fetchUser } = useAuthStore();
+
   const errorKey = searchParams.get('error');
   const errorMsg = errorKey ? (errorMessages[errorKey] ?? 'Ocurrió un error. Intenta nuevamente.') : null;
+
+  const [demoLoading, setDemoLoading] = useState<DemoUserType | null>(null);
+  const [demoError, setDemoError] = useState<string | null>(null);
+
+  const handleDemoLogin = async (type: DemoUserType) => {
+    setDemoLoading(type);
+    setDemoError(null);
+    try {
+      const { token } = await authService.demoLogin(type);
+      setToken(token);
+      await fetchUser();
+      navigate('/home', { replace: true });
+    } catch {
+      setDemoError(
+        'No se pudo iniciar sesión en Modo Demo. ' +
+        'Verifica que el backend esté ejecutándose y que las variables DEMO_* estén configuradas.',
+      );
+    } finally {
+      setDemoLoading(null);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
@@ -55,6 +82,60 @@ const LoginPage = () => {
             </svg>
             Continuar con Google
           </button>
+
+          {/* ── Modo Demo ─────────────────────────────────────────────── */}
+          {IS_DEMO_MODE && (
+            <div className="mt-6 pt-6 border-t border-dashed border-amber-300">
+              <div className="flex items-center gap-2 mb-3">
+                <FlaskConical size={14} className="text-amber-500 flex-shrink-0" />
+                <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide">
+                  Modo Demo — solo desarrollo
+                </p>
+              </div>
+
+              {demoError && (
+                <div className="mb-3 flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
+                  <AlertCircle size={14} className="text-red-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-red-700">{demoError}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleDemoLogin('professor')}
+                  disabled={demoLoading !== null}
+                  className="flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl border-2
+                             border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800
+                             font-medium text-sm transition-all duration-150 disabled:opacity-50
+                             disabled:cursor-not-allowed"
+                >
+                  {demoLoading === 'professor' ? (
+                    <div className="w-4 h-4 rounded-full animate-spin border-2 border-amber-400 border-t-transparent" />
+                  ) : (
+                    <BookOpen size={18} className="text-amber-600" />
+                  )}
+                  <span className="text-xs leading-tight text-center">Entrar como<br/>Profesor</span>
+                </button>
+
+                <button
+                  onClick={() => handleDemoLogin('student')}
+                  disabled={demoLoading !== null}
+                  className="flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl border-2
+                             border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800
+                             font-medium text-sm transition-all duration-150 disabled:opacity-50
+                             disabled:cursor-not-allowed"
+                >
+                  {demoLoading === 'student' ? (
+                    <div className="w-4 h-4 rounded-full animate-spin border-2 border-amber-400 border-t-transparent" />
+                  ) : (
+                    <GraduationCap size={18} className="text-amber-600" />
+                  )}
+                  <span className="text-xs leading-tight text-center">Entrar como<br/>Estudiante</span>
+                </button>
+              </div>
+            </div>
+          )}
+          {/* ── Fin Modo Demo ──────────────────────────────────────────── */}
 
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
             <p className="text-xs text-gray-400">

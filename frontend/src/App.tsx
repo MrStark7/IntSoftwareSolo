@@ -14,6 +14,10 @@ import ProfilePage from './pages/ProfilePage';
 import OffersPage from './pages/OffersPage';
 import OfferDetailPage from './pages/OfferDetailPage';
 import MyApplicationsPage from './pages/MyApplicationsPage';
+import ProfessorCoursesPage from './pages/ProfessorCoursesPage';
+import ProfessorOffersPage from './pages/ProfessorOffersPage';
+import ProfessorOfferDetailPage from './pages/ProfessorOfferDetailPage';
+import CreateOfferPage from './pages/CreateOfferPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -44,9 +48,17 @@ const App = () => {
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+
+          {/* Student routes */}
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/offers/:id" element={<OfferDetailPage />} />
           <Route path="/my-applications" element={<MyApplicationsPage />} />
+
+          {/* Professor routes */}
+          <Route path="/professor/courses" element={<ProfessorCoursesPage />} />
+          <Route path="/professor/offers" element={<ProfessorOffersPage />} />
+          <Route path="/professor/offers/:id" element={<ProfessorOfferDetailPage />} />
+          <Route path="/professor/create-offer" element={<CreateOfferPage />} />
         </Route>
       </Route>
 

@@ -12,6 +12,7 @@ export interface OfferResponse {
   applicationStart: Date;
   applicationEnd: Date;
   status: OfferStatus;
+  closedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

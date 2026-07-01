@@ -41,4 +41,25 @@ export class UsersService {
       },
     });
   }
+
+  /**
+   * Upsert a demo user using a deterministic fake googleId.
+   * Used exclusively by the Demo Login endpoint (DEMO_MODE=true, NODE_ENV !== production).
+   * The demo user is keyed by email so it is always the same record across restarts.
+   */
+  async upsertDemoUser(params: {
+    googleId: string;
+    email: string;
+    name: string;
+  }): Promise<User> {
+    return this.prisma.user.upsert({
+      where: { email: params.email },
+      update: { name: params.name, googleId: params.googleId },
+      create: {
+        googleId: params.googleId,
+        email: params.email,
+        name: params.name,
+      },
+    });
+  }
 }

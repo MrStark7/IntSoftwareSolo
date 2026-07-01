@@ -1,5 +1,5 @@
 import { ApplicationStatus, Offer } from '@prisma/client';
-import { Student } from '../academic/academic.interfaces';
+import { Student, Carrera } from '../academic/academic.interfaces';
 
 // ─── Resultado de elegibilidad ────────────────────────────────────────────────
 
@@ -33,9 +33,33 @@ export interface ApplicationWithOffer extends ApplicationResponse {
   offer: Offer;
 }
 
+// ─── Info académica del postulante (desde API institucional) ──────────────────
+
+export interface StudentAcademicInfo {
+  nombre: string;
+  correo: string;
+  rut: string;
+  carrera: Carrera;
+  ppa: number | null;
+  alertaAcademica: boolean;
+}
+
+/** Postulación enriquecida con datos académicos del estudiante desde la API. */
+export interface ApplicationWithAcademic extends ApplicationResponse {
+  /** null si el estudiante no se encontró en el registro institucional */
+  student: StudentAcademicInfo | null;
+}
+
 // ─── Constante interna ────────────────────────────────────────────────────────
 
 export const STUDENT_DOMAIN = '@alumnos.ucn.cl';
+
+/** Orden de display para ordenar postulaciones: PENDING → APPROVED → REJECTED */
+export const APPLICATION_STATUS_ORDER: Record<ApplicationStatus, number> = {
+  PENDING:  0,
+  APPROVED: 1,
+  REJECTED: 2,
+};
 
 /**
  * Evalúa si un estudiante cumple los requisitos fijos de ayudantía.

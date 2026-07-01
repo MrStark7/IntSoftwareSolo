@@ -2,7 +2,9 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Body,
+  Param,
   UseGuards,
   Request,
   HttpCode,
@@ -11,11 +13,14 @@ import {
 import { ApplicationService } from './application.service';
 import { CreateApplicationDto } from './application.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { IsProfessorGuard } from '../guards/is-professor.guard';
 
 @Controller('applications')
 @UseGuards(JwtAuthGuard)
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
+
+  // ── Estudiante ────────────────────────────────────────────────────────────
 
   @Get('me')
   findMyApplications(@Request() req) {
@@ -26,5 +31,19 @@ export class ApplicationController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() dto: CreateApplicationDto, @Request() req) {
     return this.applicationService.create(dto, req.user);
+  }
+
+  // ── Profesor ──────────────────────────────────────────────────────────────
+
+  @Patch(':id/approve')
+  @UseGuards(IsProfessorGuard)
+  approve(@Param('id') id: string, @Request() req) {
+    return this.applicationService.approve(id, req.user);
+  }
+
+  @Patch(':id/reject')
+  @UseGuards(IsProfessorGuard)
+  reject(@Param('id') id: string, @Request() req) {
+    return this.applicationService.reject(id, req.user);
   }
 }

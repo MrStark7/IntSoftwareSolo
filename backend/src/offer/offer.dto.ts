@@ -10,14 +10,18 @@ import {
 import { OfferStatus } from '@prisma/client';
 
 export class CreateOfferDto {
+  /**
+   * Código de la asignatura obtenido desde GET /teacher/my-courses.
+   * El backend valida que pertenezca al profesor antes de crear la oferta.
+   */
   @IsString()
   @MinLength(2)
   courseCode: string;
 
-  @IsString()
-  @MinLength(2)
-  courseName: string;
-
+  /**
+   * NRC de la sección obtenido desde GET /teacher/my-courses.
+   * No puede ingresarse manualmente desde el formulario.
+   */
   @IsString()
   @MinLength(1)
   nrc: string;
@@ -42,21 +46,6 @@ export class CreateOfferDto {
 }
 
 export class UpdateOfferDto {
-  @IsString()
-  @MinLength(2)
-  @IsOptional()
-  courseCode?: string;
-
-  @IsString()
-  @MinLength(2)
-  @IsOptional()
-  courseName?: string;
-
-  @IsString()
-  @MinLength(1)
-  @IsOptional()
-  nrc?: string;
-
   @IsInt()
   @Min(1)
   @IsOptional()

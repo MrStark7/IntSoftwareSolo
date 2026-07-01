@@ -1,12 +1,15 @@
 import {
   Controller,
   Get,
+  Post,
+  Body,
   UseGuards,
   Request,
   Res,
   Logger,
   HttpException,
   HttpStatus,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -14,6 +17,8 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
+import { DemoLoginDto } from './demo-login.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -22,6 +27,7 @@ export class AuthController {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly usersService: UsersService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -66,5 +72,68 @@ export class AuthController {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
     return this.authService.getProfile(req.user);
+  }
+
+  /**
+   * Demo Login — solo disponible cuando DEMO_MODE=true y NODE_ENV !== "production".
+   * Genera un JWT idéntico al del login con Google, facilitando pruebas de desarrollo
+   * sin necesidad de credenciales institucionales reales.
+   *
+   * Profesor Demo: JWT incluye { email, name, rut } para preparar la arquitectura
+   *               de resolución institucional de identidad.
+   * Estudiante Demo: JWT incluye { email, name }.
+   */
+  @Post('demo-login')
+  @ApiOperation({
+    summary: 'Demo Login (solo desarrollo) — genera JWT sin Google OAuth',
+    description:
+      'Solo disponible cuando DEMO_MODE=true y NODE_ENV !== "production". ' +
+      'Acepta { "type": "professor" | "student" }.',
+  })
+  async demoLogin(@Body() dto: DemoLoginDto) {
+    const isDemoMode = this.configService.get<string>('DEMO_MODE') === 'true';
+    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
+
+    if (!isDemoMode || isProduction) {
+      throw new ForbiddenException(
+        'Demo Login está deshabilitado. Solo disponible con DEMO_MODE=true y NODE_ENV !== production.',
+      );
+    }
+
+    const isProfessor = dto.type === 'professor';
+
+    const email = this.configService.get<string>(
+      isProfessor ? 'DEMO_PROFESSOR_EMAIL' : 'DEMO_STUDENT_EMAIL',
+    );
+    const name = this.configService.get<string>(
+      isProfessor ? 'DEMO_PROFESSOR_NAME' : 'DEMO_STUDENT_NAME',
+    );
+    const rut = isProfessor
+      ? this.configService.get<string>('DEMO_PROFESSOR_RUT')
+      : undefined;
+
+    if (!email || !name) {
+      throw new ForbiddenException(
+        `Las variables DEMO_${isProfessor ? 'PROFESSOR' : 'STUDENT'}_EMAIL y ` +
+        `DEMO_${isProfessor ? 'PROFESSOR' : 'STUDENT'}_NAME no están configuradas en .env.`,
+      );
+    }
+
+    // Upsert the demo user in DB using a deterministic fake googleId.
+    // This ensures JwtStrategy.validate() can always find the user by sub (user.id).
+    const googleId = isProfessor ? 'demo-professor' : 'demo-student';
+    const user = await this.usersService.upsertDemoUser({ googleId, email, name });
+
+    // Reuse the exact same generateToken() used by Google login.
+    // For the professor, rut is included in the JWT payload to prepare the
+    // institutional identity resolution architecture.
+    const token = this.authService.generateToken(user, rut);
+
+    this.logger.log(`Demo login issued for ${dto.type}: ${email}`);
+
+    return {
+      token,
+      user: this.authService.getProfile(user),
+    };
   }
 }

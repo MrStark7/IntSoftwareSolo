@@ -33,7 +33,14 @@ export class OfferController {
     return this.offerService.findAll();
   }
 
-  /** Devuelve la oferta junto al estado de elegibilidad del usuario autenticado. */
+  /** Ofertas creadas por el profesor autenticado. Debe ir ANTES de /:id. */
+  @Get('mine')
+  @UseGuards(IsProfessorGuard)
+  findMine(@Request() req) {
+    return this.offerService.findByProfessor(req.user.email);
+  }
+
+  /** Detalle de oferta + estado de elegibilidad del usuario autenticado. */
   @Get(':id')
   async findOne(
     @Param('id') id: string,
@@ -45,6 +52,19 @@ export class OfferController {
       offer.courseCode,
     );
     return { offer, eligibility };
+  }
+
+  /**
+   * Postulaciones de una oferta con datos académicos institucionales.
+   * Solo el profesor propietario de la oferta puede consultarlas.
+   */
+  @Get(':offerId/applications')
+  @UseGuards(IsProfessorGuard)
+  getOfferApplications(
+    @Param('offerId') offerId: string,
+    @Request() req,
+  ) {
+    return this.applicationService.findByOffer(offerId, req.user);
   }
 
   // ── Solo profesores ───────────────────────────────────────────────────────

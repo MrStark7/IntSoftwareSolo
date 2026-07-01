@@ -15,6 +15,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
+// ─── Role detection ───────────────────────────────────────────────────────────
+
+const isProfessorEmail = (email: string | undefined) =>
+  email?.toLowerCase().endsWith('@ucn.cl') ?? false;
+
+// ─── Nav item definitions ─────────────────────────────────────────────────────
+
 interface NavItem {
   label: string;
   to: string;
@@ -22,24 +29,31 @@ interface NavItem {
   disabled?: boolean;
 }
 
-const navItems: NavItem[] = [
-  { label: 'Inicio',              to: '/home',             icon: Home },
-  { label: 'Perfil',             to: '/profile',          icon: User },
-  { label: 'Ofertas',            to: '/offers',           icon: ClipboardList },
-  { label: 'Mis Postulaciones',  to: '/my-applications',  icon: FileText },
-  { label: 'Cursos',             to: '/courses',          icon: BookOpen,    disabled: true },
+const STUDENT_NAV: NavItem[] = [
+  { label: 'Inicio',             to: '/home',             icon: Home },
+  { label: 'Perfil',            to: '/profile',          icon: User },
+  { label: 'Ofertas',           to: '/offers',           icon: ClipboardList },
+  { label: 'Mis Postulaciones', to: '/my-applications',  icon: FileText },
+];
+
+const PROFESSOR_NAV: NavItem[] = [
+  { label: 'Inicio',      to: '/home',              icon: Home },
+  { label: 'Perfil',      to: '/profile',           icon: User },
+  { label: 'Mis Cursos',  to: '/professor/courses', icon: BookOpen },
+  { label: 'Mis Ofertas', to: '/professor/offers',  icon: ClipboardList },
 ];
 
 interface SidebarProps {
   children: React.ReactNode;
 }
 
-
 const Sidebar = ({ children }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const navItems = isProfessorEmail(user?.email) ? PROFESSOR_NAV : STUDENT_NAV;
 
   const handleLogout = () => {
     logout();
@@ -57,6 +71,21 @@ const Sidebar = ({ children }: SidebarProps) => {
         )}
       </div>
 
+      {/* Role badge */}
+      {!collapsed && user && (
+        <div className="px-4 py-2 border-b border-gray-50">
+          <span
+            className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+              isProfessorEmail(user.email)
+                ? 'bg-ucn-teal-light text-ucn-teal-dark'
+                : 'bg-primary-50 text-primary-700'
+            }`}
+          >
+            {isProfessorEmail(user.email) ? 'Profesor' : 'Estudiante'}
+          </span>
+        </div>
+      )}
+
       {/* Nav */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
@@ -70,8 +99,11 @@ const Sidebar = ({ children }: SidebarProps) => {
               >
                 <Icon size={18} />
                 {!collapsed && (
-                  <span className="flex-1">{item.label}
-                    <span className="ml-2 text-xs bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">Pronto</span>
+                  <span className="flex-1">
+                    {item.label}
+                    <span className="ml-2 text-xs bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded">
+                      Pronto
+                    </span>
                   </span>
                 )}
               </div>

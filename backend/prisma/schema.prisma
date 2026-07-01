@@ -32,6 +32,8 @@ model Offer {
   applicationStart DateTime
   applicationEnd   DateTime
   status           OfferStatus   @default(DRAFT)
+  /// Fecha de cierre automático. Se registra cuando se completan todas las vacantes.
+  closedAt         DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 

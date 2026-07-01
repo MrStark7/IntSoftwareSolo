@@ -3,8 +3,11 @@ import {
   Logger,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { TeacherService } from '../teacher/teacher.service';
 import { CreateOfferDto, UpdateOfferDto } from './offer.dto';
 import { User } from '@prisma/client';
 import { OfferResponse } from './offer.interfaces';
@@ -13,12 +16,24 @@ import { OfferResponse } from './offer.interfaces';
 export class OfferService {
   private readonly logger = new Logger(OfferService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly teacherService: TeacherService,
+  ) {}
 
   // ─── Obtener todas ────────────────────────────────────────────────────────
 
   async findAll(): Promise<OfferResponse[]> {
     return this.prisma.offer.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  // ─── Mis ofertas (profesor) ────────────────────────────────────────────────
+
+  async findByProfessor(professorEmail: string): Promise<OfferResponse[]> {
+    return this.prisma.offer.findMany({
+      where: { professorEmail: professorEmail.toLowerCase() },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -36,24 +51,63 @@ export class OfferService {
   // ─── Crear ────────────────────────────────────────────────────────────────
 
   async create(dto: CreateOfferDto, professor: User): Promise<OfferResponse> {
-    this.logger.log(`Creating offer for professor: ${professor.email}`);
+    // 1. Validar fechas
+    if (new Date(dto.applicationEnd) <= new Date(dto.applicationStart)) {
+      throw new BadRequestException(
+        'La fecha de término debe ser posterior a la fecha de inicio.',
+      );
+    }
+
+    // 2. Validar que el curso pertenece al profesor mediante la API institucional
+    //    TODO: Cuando se implemente la resolución dinámica de RUT, esta llamada
+    //          usará el RUT del profesor autenticado en lugar de DEMO_PROFESSOR_RUT.
+    const courses = await this.teacherService.getMyCourses();
+    const course  = courses.find(
+      (c) => c.codigo === dto.courseCode && c.nrc === dto.nrc,
+    );
+
+    if (!course) {
+      throw new ForbiddenException(
+        'El curso seleccionado no pertenece al profesor autenticado o no existe en este período.',
+      );
+    }
+
+    // 3. Evitar oferta duplicada abierta para el mismo curso
+    const duplicate = await this.prisma.offer.findFirst({
+      where: {
+        professorEmail: professor.email.toLowerCase(),
+        courseCode:     dto.courseCode,
+        status:         'OPEN',
+      },
+    });
+
+    if (duplicate) {
+      throw new ConflictException(
+        `Ya existe una oferta abierta para el curso ${dto.courseCode}. Ciérrala antes de crear una nueva.`,
+      );
+    }
+
+    // 4. Crear — courseName proviene de la API, nunca del cliente
+    this.logger.log(
+      `Creating offer: ${course.asignatura} (${course.codigo}) by ${professor.email}`,
+    );
 
     const offer = await this.prisma.offer.create({
       data: {
-        courseCode:       dto.courseCode,
-        courseName:       dto.courseName,
-        nrc:              dto.nrc,
-        professorEmail:   professor.email,
+        courseCode:       course.codigo,
+        courseName:       course.asignatura,
+        nrc:              course.nrc,
+        professorEmail:   professor.email.toLowerCase(),
         professorName:    professor.name,
         vacancies:        dto.vacancies,
         description:      dto.description,
         applicationStart: new Date(dto.applicationStart),
         applicationEnd:   new Date(dto.applicationEnd),
-        status:           dto.status ?? 'DRAFT',
+        status:           dto.status ?? 'OPEN',
       },
     });
 
-    this.logger.log(`Offer created with ID: ${offer.id}`);
+    this.logger.log(`Offer created: ${offer.id}`);
     return offer;
   }
 
@@ -67,12 +121,25 @@ export class OfferService {
     const offer = await this.findOne(id);
     this.assertOwnership(offer, professor);
 
-    const updated = await this.prisma.offer.update({
+    if (offer.status === 'CLOSED') {
+      throw new BadRequestException(
+        'No es posible modificar una oferta cerrada. Las vacantes han sido completadas automáticamente.',
+      );
+    }
+
+    if (
+      dto.applicationStart !== undefined &&
+      dto.applicationEnd   !== undefined &&
+      new Date(dto.applicationEnd) <= new Date(dto.applicationStart)
+    ) {
+      throw new BadRequestException(
+        'La fecha de término debe ser posterior a la fecha de inicio.',
+      );
+    }
+
+    return this.prisma.offer.update({
       where: { id },
       data: {
-        ...(dto.courseCode       !== undefined && { courseCode:       dto.courseCode }),
-        ...(dto.courseName       !== undefined && { courseName:       dto.courseName }),
-        ...(dto.nrc              !== undefined && { nrc:              dto.nrc }),
         ...(dto.vacancies        !== undefined && { vacancies:        dto.vacancies }),
         ...(dto.description      !== undefined && { description:      dto.description }),
         ...(dto.applicationStart !== undefined && { applicationStart: new Date(dto.applicationStart) }),
@@ -80,9 +147,6 @@ export class OfferService {
         ...(dto.status           !== undefined && { status:           dto.status }),
       },
     });
-
-    this.logger.log(`Offer ${id} updated by ${professor.email}`);
-    return updated;
   }
 
   // ─── Eliminar ─────────────────────────────────────────────────────────────
