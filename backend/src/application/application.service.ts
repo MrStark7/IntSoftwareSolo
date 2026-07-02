@@ -9,6 +9,7 @@ import {
 import { ApplicationStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AcademicService } from '../academic/academic.service';
+import { NotificationService } from '../notification/notification.service';
 import { User } from '@prisma/client';
 import { CreateApplicationDto } from './application.dto';
 import {
@@ -29,6 +30,7 @@ export class ApplicationService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly academicService: AcademicService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   // ─── Elegibilidad ─────────────────────────────────────────────────────────
@@ -113,7 +115,7 @@ export class ApplicationService {
 
     this.logger.log(`Application: ${email} → offer ${offer.id} (${offer.courseCode})`);
 
-    return this.prisma.application.create({
+    const application = await this.prisma.application.create({
       data: {
         offerId:      dto.offerId,
         studentEmail: email,
@@ -122,6 +124,21 @@ export class ApplicationService {
         status:       'PENDING',
       },
     });
+
+    // Notificación al profesor — fire-and-forget (no bloquea la respuesta)
+    this.notificationService
+      .notifyNewApplication({
+        professorEmail: offer.professorEmail,
+        studentName:    student.nombre,
+        courseName:     offer.courseName,
+        offerId:        offer.id,
+        applicationId:  application.id,
+      })
+      .catch((e) =>
+        this.logger.error('Failed to create NEW_APPLICATION notification', e),
+      );
+
+    return application;
   }
 
   // ─── Mis postulaciones (estudiante) ───────────────────────────────────────
@@ -268,9 +285,9 @@ export class ApplicationService {
     );
 
     // 5. Ejecutar en una única transacción Prisma para garantizar consistencia
-    return this.prisma.$transaction(async (tx) => {
+    const updated = await this.prisma.$transaction(async (tx) => {
       // a) Actualizar el estado de esta postulación
-      const updated = await tx.application.update({
+      const u = await tx.application.update({
         where: { id: applicationId },
         data: { status: newStatus },
       });
@@ -305,7 +322,31 @@ export class ApplicationService {
         }
       }
 
-      return updated;
+      return u;
     });
+
+    // 6. Notificación al estudiante — fire-and-forget (fuera de la transacción)
+    const notifyFn =
+      newStatus === 'APPROVED'
+        ? this.notificationService.notifyApplicationApproved.bind(
+            this.notificationService,
+          )
+        : this.notificationService.notifyApplicationRejected.bind(
+            this.notificationService,
+          );
+
+    notifyFn({
+      studentEmail:  app.studentEmail,
+      courseName:    app.offer.courseName,
+      offerId:       app.offerId,
+      applicationId: app.id,
+    }).catch((e) =>
+      this.logger.error(
+        `Failed to create ${newStatus} notification for ${app.studentEmail}`,
+        e,
+      ),
+    );
+
+    return updated;
   }
 }

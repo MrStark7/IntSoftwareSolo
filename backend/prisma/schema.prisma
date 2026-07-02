@@ -76,3 +76,27 @@ enum ApplicationStatus {
   APPROVED
   REJECTED
 }
+
+model Notification {
+  id                   String           @id @default(cuid())
+  recipientEmail       String
+  recipientRole        Role
+  type                 NotificationType
+  title                String
+  message              String
+  read                 Boolean          @default(false)
+  /// ID de la oferta relacionada — para navegación contextual futura.
+  relatedOfferId       String?
+  /// ID de la postulación relacionada — para navegación contextual futura.
+  relatedApplicationId String?
+  createdAt            DateTime         @default(now())
+
+  @@index([recipientEmail, read])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  NEW_APPLICATION
+  APPLICATION_APPROVED
+  APPLICATION_REJECTED
+}

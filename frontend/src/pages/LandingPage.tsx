@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Users, Award, ArrowRight, CheckCircle } from 'lucide-react';
 import { authService } from '../services/auth.service';
+import { APP_NAME } from '../constants/app';
 
 const features = [
   {
@@ -213,7 +214,7 @@ const LandingPage = () => {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">¿Listo para comenzar?</h2>
           <p className="text-white/60 text-lg mb-10">
-            Únete hoy a tu comunidad universitaria en la Plataforma AC.
+            Únete hoy a tu comunidad universitaria en la {APP_NAME}.
           </p>
           <button
             onClick={() => authService.loginWithGoogle()}

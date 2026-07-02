@@ -1,16 +1,19 @@
+import { useEffect, useState } from 'react';
 import { BookOpen, ClipboardList, Users, Bell, TrendingUp, Clock, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { roleLabels, roleColors } from '../utils/roleLabels';
+import { notificationService } from '../services/notification.service';
+import { APP_NAME } from '../constants/app';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const isProfessorEmail = (email: string | undefined): boolean =>
   email?.toLowerCase().endsWith('@ucn.cl') ?? false;
 
-// ─── Stat cards (estáticas — próximamente) ────────────────────────────────────
+// ─── Stat cards estáticas ─────────────────────────────────────────────────────
 
-const statCards = [
+const STATIC_STAT_CARDS = [
   {
     label: 'Cursos Inscritos',
     value: '—',
@@ -31,13 +34,6 @@ const statCards = [
     icon: Users,
     color: 'bg-green-50 text-green-600',
     description: 'Próximamente',
-  },
-  {
-    label: 'Notificaciones',
-    value: '0',
-    icon: Bell,
-    color: 'bg-orange-50 text-orange-600',
-    description: 'Al día',
   },
 ];
 
@@ -121,11 +117,19 @@ const PROFESSOR_ACTIONS: QuickAction[] = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 const HomePage = () => {
-  const { user } = useAuth();
+  const { user }  = useAuth();
   const navigate  = useNavigate();
+  const [unreadCount, setUnreadCount] = useState<number | null>(null);
 
-  const isProfessor   = isProfessorEmail(user?.email);
-  const quickActions  = isProfessor ? PROFESSOR_ACTIONS : STUDENT_ACTIONS;
+  const isProfessor  = isProfessorEmail(user?.email);
+  const quickActions = isProfessor ? PROFESSOR_ACTIONS : STUDENT_ACTIONS;
+
+  useEffect(() => {
+    notificationService
+      .getUnreadCount()
+      .then(({ unread }) => setUnreadCount(unread))
+      .catch(() => setUnreadCount(0));
+  }, []);
 
   const greeting = () => {
     const hour = new Date().getHours();
@@ -166,7 +170,8 @@ const HomePage = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {statCards.map((stat) => {
+        {/* Tarjetas estáticas */}
+        {STATIC_STAT_CARDS.map((stat) => {
           const Icon = stat.icon;
           return (
             <div key={stat.label} className="card">
@@ -179,6 +184,28 @@ const HomePage = () => {
             </div>
           );
         })}
+
+        {/* Tarjeta Notificaciones — dinámica y clickable */}
+        <button
+          onClick={() => navigate('/notifications')}
+          className="card text-left hover:shadow-md transition-shadow cursor-pointer group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-3 group-hover:bg-orange-100 transition-colors">
+            <Bell size={20} />
+          </div>
+          <div className="flex items-baseline gap-1">
+            <p className="text-2xl font-bold text-gray-900">
+              {unreadCount === null ? '…' : unreadCount}
+            </p>
+            {unreadCount !== null && unreadCount > 0 && (
+              <span className="text-xs font-semibold text-orange-500">nuevas</span>
+            )}
+          </div>
+          <p className="text-sm font-medium text-gray-700 mt-0.5">Notificaciones</p>
+          <p className="text-xs text-gray-400 mt-1">
+            {unreadCount === 0 ? 'Al día' : 'Haz clic para ver'}
+          </p>
+        </button>
       </div>
 
       {/* Quick Actions */}
@@ -189,7 +216,6 @@ const HomePage = () => {
             const Icon = action.icon;
 
             if (action.soon) {
-              // Disabled card — same visual as before
               return (
                 <button
                   key={action.label}
@@ -208,7 +234,6 @@ const HomePage = () => {
               );
             }
 
-            // Enabled card — clickable
             return (
               <button
                 key={action.label}
@@ -228,7 +253,7 @@ const HomePage = () => {
 
       {/* Welcome notice */}
       <div className="rounded-xl p-6 text-white" style={{ background: 'linear-gradient(135deg, #003057 0%, #267A8A 100%)' }}>
-        <h3 className="font-semibold text-lg mb-1">¡Bienvenido a la Plataforma AC!</h3>
+        <h3 className="font-semibold text-lg mb-1">¡Bienvenido a la {APP_NAME}!</h3>
         <p className="text-white/70 text-sm leading-relaxed">
           Este es tu centro académico. Próximamente se agregarán más funciones — incluyendo inscripción a cursos,
           seguimiento de progreso y herramientas de colaboración.

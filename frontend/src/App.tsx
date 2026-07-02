@@ -19,6 +19,7 @@ import ProfessorOffersPage from './pages/ProfessorOffersPage';
 import ProfessorOfferDetailPage from './pages/ProfessorOfferDetailPage';
 import CreateOfferPage from './pages/CreateOfferPage';
 import StudentAssistantshipsPage from './pages/StudentAssistantshipsPage';
+import NotificationsPage from './pages/NotificationsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -55,6 +56,7 @@ const App = () => {
           <Route path="/offers/:id" element={<OfferDetailPage />} />
           <Route path="/my-applications" element={<MyApplicationsPage />} />
           <Route path="/student/assistantships" element={<StudentAssistantshipsPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
 
           {/* Professor routes */}
           <Route path="/professor/courses" element={<ProfessorCoursesPage />} />

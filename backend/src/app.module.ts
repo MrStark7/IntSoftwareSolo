@@ -8,6 +8,7 @@ import { IdentityModule } from './identity/identity.module';
 import { OfferModule } from './offer/offer.module';
 import { ApplicationModule } from './application/application.module';
 import { TeacherModule } from './teacher/teacher.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TeacherModule } from './teacher/teacher.module';
     OfferModule,
     ApplicationModule,
     TeacherModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

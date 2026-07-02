@@ -107,3 +107,29 @@ export interface ApplicationWithAcademic extends Application {
   /** null si el estudiante no figura en el registro institucional */
   student: StudentAcademicInfo | null;
 }
+
+// ─── Notificaciones ───────────────────────────────────────────────────────────
+
+export type NotificationType =
+  | 'NEW_APPLICATION'
+  | 'APPLICATION_APPROVED'
+  | 'APPLICATION_REJECTED';
+
+export interface AppNotification {
+  id: string;
+  recipientEmail: string;
+  recipientRole: 'STUDENT' | 'PROFESSOR';
+  type: NotificationType;
+  title: string;
+  message: string;
+  read: boolean;
+  /** Para navegación contextual futura — no se utiliza todavía. */
+  relatedOfferId: string | null;
+  /** Para navegación contextual futura — no se utiliza todavía. */
+  relatedApplicationId: string | null;
+  createdAt: string;
+}
+
+export interface UnreadCount {
+  unread: number;
+}

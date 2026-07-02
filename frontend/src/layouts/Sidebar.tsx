@@ -6,6 +6,7 @@ import {
   BookOpen,
   ClipboardList,
   FileText,
+  Bell,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -34,13 +35,15 @@ const STUDENT_NAV: NavItem[] = [
   { label: 'Perfil',            to: '/profile',          icon: User },
   { label: 'Ofertas',           to: '/offers',           icon: ClipboardList },
   { label: 'Mis Postulaciones', to: '/my-applications',  icon: FileText },
+  { label: 'Notificaciones',    to: '/notifications',    icon: Bell },
 ];
 
 const PROFESSOR_NAV: NavItem[] = [
-  { label: 'Inicio',      to: '/home',              icon: Home },
-  { label: 'Perfil',      to: '/profile',           icon: User },
-  { label: 'Mis Cursos',  to: '/professor/courses', icon: BookOpen },
-  { label: 'Mis Ofertas', to: '/professor/offers',  icon: ClipboardList },
+  { label: 'Inicio',           to: '/home',              icon: Home },
+  { label: 'Perfil',           to: '/profile',           icon: User },
+  { label: 'Mis Cursos',       to: '/professor/courses', icon: BookOpen },
+  { label: 'Mis Ofertas',      to: '/professor/offers',  icon: ClipboardList },
+  { label: 'Notificaciones',   to: '/notifications',     icon: Bell },
 ];
 
 interface SidebarProps {
