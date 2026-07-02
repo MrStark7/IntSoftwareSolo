@@ -21,15 +21,11 @@ export class OfferService {
     private readonly teacherService: TeacherService,
   ) {}
 
-  // ─── Obtener todas ────────────────────────────────────────────────────────
-
   async findAll(): Promise<OfferResponse[]> {
     return this.prisma.offer.findMany({
       orderBy: { createdAt: 'desc' },
     });
   }
-
-  // ─── Mis ofertas (profesor) ────────────────────────────────────────────────
 
   async findByProfessor(professorEmail: string): Promise<OfferResponse[]> {
     return this.prisma.offer.findMany({
@@ -37,8 +33,6 @@ export class OfferService {
       orderBy: { createdAt: 'desc' },
     });
   }
-
-  // ─── Obtener una ──────────────────────────────────────────────────────────
 
   async findOne(id: string): Promise<OfferResponse> {
     const offer = await this.prisma.offer.findUnique({ where: { id } });
@@ -48,19 +42,13 @@ export class OfferService {
     return offer;
   }
 
-  // ─── Crear ────────────────────────────────────────────────────────────────
-
   async create(dto: CreateOfferDto, professor: User): Promise<OfferResponse> {
-    // 1. Validar fechas
     if (new Date(dto.applicationEnd) <= new Date(dto.applicationStart)) {
       throw new BadRequestException(
         'La fecha de término debe ser posterior a la fecha de inicio.',
       );
     }
 
-    // 2. Validar que el curso pertenece al profesor mediante la API institucional
-    //    TODO: Cuando se implemente la resolución dinámica de RUT, esta llamada
-    //          usará el RUT del profesor autenticado en lugar de DEMO_PROFESSOR_RUT.
     const courses = await this.teacherService.getMyCourses();
     const course  = courses.find(
       (c) => c.codigo === dto.courseCode && c.nrc === dto.nrc,
@@ -72,7 +60,6 @@ export class OfferService {
       );
     }
 
-    // 3. Evitar oferta duplicada abierta para el mismo curso
     const duplicate = await this.prisma.offer.findFirst({
       where: {
         professorEmail: professor.email.toLowerCase(),
@@ -111,8 +98,6 @@ export class OfferService {
     return offer;
   }
 
-  // ─── Editar ───────────────────────────────────────────────────────────────
-
   async update(
     id: string,
     dto: UpdateOfferDto,
@@ -149,8 +134,6 @@ export class OfferService {
     });
   }
 
-  // ─── Eliminar ─────────────────────────────────────────────────────────────
-
   async remove(id: string, professor: User): Promise<{ message: string }> {
     const offer = await this.findOne(id);
     this.assertOwnership(offer, professor);
@@ -160,8 +143,6 @@ export class OfferService {
 
     return { message: `Oferta "${offer.courseName}" eliminada correctamente` };
   }
-
-  // ─── Helpers ──────────────────────────────────────────────────────────────
 
   private assertOwnership(offer: OfferResponse, professor: User): void {
     if (offer.professorEmail.toLowerCase() !== professor.email.toLowerCase()) {

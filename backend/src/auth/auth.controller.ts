@@ -34,9 +34,7 @@ export class AuthController {
   @Get('google')
   @UseGuards(GoogleAuthGuard)
   @ApiOperation({ summary: 'Initiate Google OAuth — redirects to Google consent screen' })
-  googleAuth() {
-    // Passport intercepts this and redirects to Google. No body needed.
-  }
+  googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
@@ -54,8 +52,6 @@ export class AuthController {
       const token = this.authService.generateToken(req.user);
       this.logger.log(`Issuing JWT for user: ${req.user.email}`);
 
-      // Redirect to the frontend callback page with the token.
-      // The frontend immediately stores it and removes it from the URL.
       return res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
     } catch (error) {
       this.logger.error('Google callback error', error);
@@ -119,14 +115,9 @@ export class AuthController {
       );
     }
 
-    // Upsert the demo user in DB using a deterministic fake googleId.
-    // This ensures JwtStrategy.validate() can always find the user by sub (user.id).
     const googleId = isProfessor ? 'demo-professor' : 'demo-student';
     const user = await this.usersService.upsertDemoUser({ googleId, email, name });
 
-    // Reuse the exact same generateToken() used by Google login.
-    // For the professor, rut is included in the JWT payload to prepare the
-    // institutional identity resolution architecture.
     const token = this.authService.generateToken(user, rut);
 
     this.logger.log(`Demo login issued for ${dto.type}: ${email}`);

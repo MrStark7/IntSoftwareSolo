@@ -25,7 +25,6 @@ import NotFoundPage from './pages/NotFoundPage';
 const App = () => {
   const initialize = useAuthStore((s) => s.initialize);
 
-  // Stable reference — only runs once on mount
   const stableInit = useCallback(() => {
     initialize();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

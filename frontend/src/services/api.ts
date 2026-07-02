@@ -10,7 +10,6 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// Attach JWT to every request if available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
   if (token) {
@@ -19,7 +18,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 responses globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {

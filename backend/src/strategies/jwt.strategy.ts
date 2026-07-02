@@ -36,9 +36,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    // Attach rut from the JWT payload when present.
-    // This allows TeacherService and future services to use req.user.rut
-    // without consulting environment variables once institutional auth is implemented.
     if (payload.rut) {
       return { ...user, rut: payload.rut };
     }

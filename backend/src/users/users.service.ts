@@ -42,12 +42,6 @@ export class UsersService {
     });
   }
 
-  /**
-   * Upsert a demo user using a deterministic fake googleId.
-   * Used exclusively by the Demo Login endpoint (DEMO_MODE=true, NODE_ENV !== production).
-   * Keyed by googleId (stable across restarts) so that changing DEMO_STUDENT_EMAIL
-   * in .env updates the existing record instead of causing a unique-constraint conflict.
-   */
   async upsertDemoUser(params: {
     googleId: string;
     email: string;

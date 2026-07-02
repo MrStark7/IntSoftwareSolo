@@ -10,14 +10,12 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  // Accept requests from the frontend origin (supports multiple origins via comma-separated env var)
   const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
     .split(',')
     .map((o) => o.trim());
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (Postman, server-to-server, Swagger)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -51,7 +49,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Validate critical env vars on startup
   const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
   const missingVars = requiredEnvVars.filter((v) => !process.env[v]);
   if (missingVars.length > 0) {

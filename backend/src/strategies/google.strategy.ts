@@ -17,8 +17,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile'],
-      // Stateless mode: disables session-based state verification.
-      // Safe for JWT-based apps; re-enable with express-session for stricter CSRF protection.
       state: false,
     });
   }

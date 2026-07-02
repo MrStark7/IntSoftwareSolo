@@ -98,16 +98,12 @@ export class NotificationService {
     });
   }
 
-  // ─── Obtener notificaciones del usuario autenticado ───────────────────────
-
   async findByUser(user: User): Promise<NotificationResponse[]> {
     return this.prisma.notification.findMany({
       where: { recipientEmail: user.email.toLowerCase() },
       orderBy: { createdAt: 'desc' },
     });
   }
-
-  // ─── Conteo de no leídas ──────────────────────────────────────────────────
 
   async getUnreadCount(user: User): Promise<UnreadCountResponse> {
     const unread = await this.prisma.notification.count({
@@ -118,8 +114,6 @@ export class NotificationService {
     });
     return { unread };
   }
-
-  // ─── Marcar una como leída ────────────────────────────────────────────────
 
   async markAsRead(id: string, user: User): Promise<NotificationResponse> {
     const notification = await this.prisma.notification.findUnique({ where: { id } });
@@ -139,8 +133,6 @@ export class NotificationService {
       data: { read: true },
     });
   }
-
-  // ─── Marcar todas como leídas ─────────────────────────────────────────────
 
   async markAllAsRead(user: User): Promise<{ updated: number }> {
     const result = await this.prisma.notification.updateMany({

@@ -62,8 +62,6 @@ export class ApplicationService {
     return evaluateEligibility(student, courseCode);
   }
 
-  // ─── Crear postulación ────────────────────────────────────────────────────
-
   async create(
     dto: CreateApplicationDto,
     user: User,
@@ -141,8 +139,6 @@ export class ApplicationService {
     return application;
   }
 
-  // ─── Mis postulaciones (estudiante) ───────────────────────────────────────
-
   async findMyApplications(user: User): Promise<ApplicationWithOffer[]> {
     return this.prisma.application.findMany({
       where: { studentEmail: user.email.toLowerCase() },
@@ -170,7 +166,6 @@ export class ApplicationService {
     offerId: string,
     professor: User,
   ): Promise<ApplicationWithAcademic[]> {
-    // 1. Verificar que la oferta pertenece al profesor autenticado
     const offer = await this.prisma.offer.findUnique({ where: { id: offerId } });
     if (!offer) throw new NotFoundException('Oferta no encontrada.');
 
@@ -180,7 +175,6 @@ export class ApplicationService {
       );
     }
 
-    // 2. Obtener postulaciones de la oferta
     const applications = await this.prisma.application.findMany({
       where: { offerId },
       orderBy: { createdAt: 'asc' },
@@ -202,7 +196,6 @@ export class ApplicationService {
       ]),
     );
 
-    // 4. Enriquecer con datos académicos
     const enriched: ApplicationWithAcademic[] = applications.map((app) => ({
       ...app,
       student: studentMap.get(app.studentEmail) ?? null,
@@ -223,16 +216,12 @@ export class ApplicationService {
     return enriched;
   }
 
-  // ─── Aprobar postulación ──────────────────────────────────────────────────
-
   async approve(
     applicationId: string,
     professor: User,
   ): Promise<ApplicationResponse> {
     return this.updateApplicationStatus(applicationId, 'APPROVED', professor);
   }
-
-  // ─── Rechazar postulación ─────────────────────────────────────────────────
 
   async reject(
     applicationId: string,
@@ -248,7 +237,6 @@ export class ApplicationService {
     newStatus: ApplicationStatus,
     professor: User,
   ): Promise<ApplicationResponse> {
-    // 1. Verificar que la postulación existe e incluir la oferta para validar propiedad
     const app = await this.prisma.application.findUnique({
       where: { id: applicationId },
       include: { offer: true },
@@ -286,7 +274,6 @@ export class ApplicationService {
 
     // 5. Ejecutar en una única transacción Prisma para garantizar consistencia
     const updated = await this.prisma.$transaction(async (tx) => {
-      // a) Actualizar el estado de esta postulación
       const u = await tx.application.update({
         where: { id: applicationId },
         data: { status: newStatus },
@@ -299,7 +286,6 @@ export class ApplicationService {
         });
 
         if (approvedCount >= app.offer.vacancies) {
-          // Cerrar la oferta y registrar fecha de cierre
           await tx.offer.update({
             where: { id: app.offerId },
             data: {
@@ -308,7 +294,6 @@ export class ApplicationService {
             },
           });
 
-          // Rechazar todas las postulaciones PENDING restantes
           const { count: rejectedCount } = await tx.application.updateMany({
             where: { offerId: app.offerId, status: 'PENDING' },
             data: { status: 'REJECTED' },
