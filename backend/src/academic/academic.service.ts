@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { EcinCourse, Student, TeacherCourses } from './academic.interfaces';
+import { buildDemoStudentProfile } from '../demo/demo-users.config';
 
 const PUCLARO_BASE = 'https://puclaro.ucn.cl/totoralillo/api';
 const HAWAII_BASE  = 'https://losvilos.ucn.cl/hawaii/api';
@@ -68,6 +69,31 @@ export class AcademicService {
           { headers: { 'X-HAWAII-AUTH': this.token } },
         ),
       );
+
+      // DEMO ONLY ─────────────────────────────────────────────────────────────
+      // El Estudiante Demo no existe en la API institucional.
+      // Cuando DEMO_MODE=true, se añade su perfil académico al final del arreglo
+      // para que atraviese exactamente la misma lógica de validación que un
+      // estudiante real. La respuesta original de la API NO se modifica.
+      // Para deshabilitar: establecer DEMO_MODE=false en .env.
+      // ────────────────────────────────────────────────────────────────────────
+      const isDemoMode       = this.config.get<string>('DEMO_MODE') === 'true';
+      const demoStudentEmail = this.config.get<string>('DEMO_STUDENT_EMAIL');
+
+      if (isDemoMode && demoStudentEmail) {
+        const emailLower    = demoStudentEmail.toLowerCase();
+        const alreadyInApi  = response.data.some(
+          (s) => s.correo.toLowerCase() === emailLower,
+        );
+
+        if (!alreadyInApi) {
+          const demoProfile = buildDemoStudentProfile(demoStudentEmail);
+          this.logger.log(`[DEMO] Injecting demo student profile for ${demoStudentEmail}`);
+          return [...response.data, demoProfile];
+        }
+      }
+      // ─────────────────────────────────────────────────────────────────────
+
       return response.data;
     } catch (error) {
       const status = error?.response?.status;

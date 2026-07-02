@@ -1,41 +1,16 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, ClipboardList, Users, Bell, TrendingUp, Clock, GraduationCap } from 'lucide-react';
+import { BookOpen, ClipboardList, Bell, TrendingUp, Clock, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { roleLabels, roleColors } from '../utils/roleLabels';
 import { notificationService } from '../services/notification.service';
+import { applicationService } from '../services/application.service';
 import { APP_NAME } from '../constants/app';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const isProfessorEmail = (email: string | undefined): boolean =>
   email?.toLowerCase().endsWith('@ucn.cl') ?? false;
-
-// ─── Stat cards estáticas ─────────────────────────────────────────────────────
-
-const STATIC_STAT_CARDS = [
-  {
-    label: 'Cursos Inscritos',
-    value: '—',
-    icon: BookOpen,
-    color: 'bg-blue-50 text-blue-600',
-    description: 'Próximamente',
-  },
-  {
-    label: 'Postulaciones AC',
-    value: '—',
-    icon: ClipboardList,
-    color: 'bg-purple-50 text-purple-600',
-    description: 'Próximamente',
-  },
-  {
-    label: 'Compañeros',
-    value: '—',
-    icon: Users,
-    color: 'bg-green-50 text-green-600',
-    description: 'Próximamente',
-  },
-];
 
 // ─── Quick action definitions ─────────────────────────────────────────────────
 
@@ -119,17 +94,39 @@ const PROFESSOR_ACTIONS: QuickAction[] = [
 const HomePage = () => {
   const { user }  = useAuth();
   const navigate  = useNavigate();
-  const [unreadCount, setUnreadCount] = useState<number | null>(null);
 
   const isProfessor  = isProfessorEmail(user?.email);
   const quickActions = isProfessor ? PROFESSOR_ACTIONS : STUDENT_ACTIONS;
 
+  // Notificaciones — ambos roles
+  const [unreadCount, setUnreadCount] = useState<number | null>(null);
+
+  // Contadores de postulaciones — solo estudiantes
+  // Una sola llamada a /applications/me para derivar APPROVED y PENDING
+  const [approvedCount, setApprovedCount] = useState<number | null>(null);
+  const [pendingCount,  setPendingCount]  = useState<number | null>(null);
+
   useEffect(() => {
+    // Notificaciones — siempre
     notificationService
       .getUnreadCount()
       .then(({ unread }) => setUnreadCount(unread))
       .catch(() => setUnreadCount(0));
-  }, []);
+
+    // Postulaciones — solo para estudiantes
+    if (!isProfessor) {
+      applicationService
+        .getMyApplications()
+        .then((apps) => {
+          setApprovedCount(apps.filter((a) => a.status === 'APPROVED').length);
+          setPendingCount(apps.filter((a) => a.status === 'PENDING').length);
+        })
+        .catch(() => {
+          setApprovedCount(0);
+          setPendingCount(0);
+        });
+    }
+  }, [isProfessor]);
 
   const greeting = () => {
     const hour = new Date().getHours();
@@ -169,23 +166,42 @@ const HomePage = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {/* Tarjetas estáticas */}
-        {STATIC_STAT_CARDS.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div key={stat.label} className="card">
-              <div className={`w-10 h-10 rounded-xl ${stat.color} flex items-center justify-center mb-3`}>
-                <Icon size={20} />
-              </div>
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              <p className="text-sm font-medium text-gray-700 mt-0.5">{stat.label}</p>
-              <p className="text-xs text-gray-400 mt-1">{stat.description}</p>
-            </div>
-          );
-        })}
+      <div className={`grid gap-4 mb-8 ${isProfessor ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-2 lg:grid-cols-3'}`}>
 
-        {/* Tarjeta Notificaciones — dinámica y clickable */}
+        {/* ── Tarjetas dinámicas del ESTUDIANTE ─────────────────────────────── */}
+        {!isProfessor && (
+          <>
+            {/* Cursos Inscritos = postulaciones APPROVED */}
+            <div className="card">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+                <GraduationCap size={20} />
+              </div>
+              <p className="text-2xl font-bold text-gray-900">
+                {approvedCount === null ? '…' : approvedCount}
+              </p>
+              <p className="text-sm font-medium text-gray-700 mt-0.5">Cursos Inscritos</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {approvedCount === 0 ? 'No tienes ayudantías asignadas' : 'Ayudantías asignadas'}
+              </p>
+            </div>
+
+            {/* Postulaciones AC = postulaciones PENDING */}
+            <div className="card">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-3">
+                <ClipboardList size={20} />
+              </div>
+              <p className="text-2xl font-bold text-gray-900">
+                {pendingCount === null ? '…' : pendingCount}
+              </p>
+              <p className="text-sm font-medium text-gray-700 mt-0.5">Postulaciones AC</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {pendingCount === 0 ? 'Sin postulaciones pendientes' : 'Pendientes de revisión'}
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Tarjeta Notificaciones — dinámica y clickable — ambos roles */}
         <button
           onClick={() => navigate('/notifications')}
           className="card text-left hover:shadow-md transition-shadow cursor-pointer group"
